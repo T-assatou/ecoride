@@ -20,32 +20,30 @@ L’objectif est de réduire l’impact environnemental des déplacements en fac
 
 📁 **Structure du projet**
 
-ecoride/
-│
-├── index.php                => Page d’accueil
-├── assets/                  => Feuilles de style, images, JS
-├── controllers/             => Fichiers PHP de traitement (authentification, réservations…)
-├── includes/                => Fichiers réutilisables (nav, footer…)
-├── models/                  => Connexion à la base de données
-├── pages/                   => Pages principales (login, user-space, admin-control…)
+ecoride/  
+├── index.php                => Page d’accueil  
+├── assets/                  => Feuilles de style, images, JS  
+├── controllers/             => Fichiers PHP de traitement (authentification, réservations…)  
+├── includes/                => Fichiers réutilisables (nav, footer…)  
+├── models/                  => Connexion à la base de données  
+├── pages/                   => Pages principales (login, user-space, admin-control…)  
 └── README.md                => Ce fichier
-
 
 ---
 
 🧪 **Identifiants de test**
 
-Utilisateur :
-Email : test@ecoride.fr
-Mot de passe : 123456
+- **Utilisateur**  
+  Email : `test@ecoride.fr`  
+  Mot de passe : `123456`  
 
-Employé :
-Email : employe@ecoride.fr
-Mot de passe : employe123
+- **Employé**  
+  Email : `employe@ecoride.fr`  
+  Mot de passe : `employe123`  
 
-Administrateur :
-Email : admin@ecoride.fr
-Mot de passe : admin123
+- **Administrateur**  
+  Email : `admin@ecoride.fr`  
+  Mot de passe : `admin123`
 
 ---
 
@@ -76,4 +74,4 @@ Mot de passe : admin123
 
 🧠 **Auteur**
 
-Projet réalisé par [T-assatou] dans le cadre du TP DWWM - Studi.
+Projet réalisé par **T-assatou** dans le cadre du TP DWWM - Studi.
