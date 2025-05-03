@@ -1,0 +1,130 @@
+/* ============================
+   Fichier : assets/css/style.css
+   Rôle : Appliquer les styles (couleurs, marges, polices...) à l'ensemble du site EcoRide
+============================= */
+
+/* ========== RESET ==========
+   Supprime les marges et paddings par défaut du navigateur
+   box-sizing: border-box permet de mieux gérer les tailles d’éléments
+============================= */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* ========== BODY ==========
+ Police globale + fond + mise en page basique
+============================= */
+body {
+  font-family: Arial, sans-serif;
+  background-color: #f9fdf9; /* Vert très pâle, ton écologique */
+  line-height: 1.6;
+  padding: 20px;
+  color: #333;
+}
+
+/* ========== HEADER ==========
+ Zone d’en-tête avec fond vert + texte centré
+============================= */
+header {
+  text-align: center;
+  background-color: #2ecc71; /* Vert vif éco */
+  color: white;
+  padding: 30px 10px;
+}
+
+/* ========== SECTION ==========
+ Mise en page des blocs de contenu
+============================= */
+section {
+  margin: 30px auto;
+  max-width: 700px;
+  text-align: center;
+}
+
+section img {
+  margin-top: 15px;
+  border-radius: 10px;
+  max-width: 100%;
+}
+
+/* ========== FORMULAIRE DE RECHERCHE ==========
+ Design du bloc de recherche dans index.php
+============================= */
+.search-bar {
+  background-color: #eafbe7; /* Vert très clair */
+  padding: 20px;
+  border-radius: 10px;
+  margin-top: 30px;
+}
+
+.search-bar form {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.search-bar input, .search-bar button {
+  padding: 10px;
+  font-size: 1rem;
+}
+
+.search-bar button {
+  background-color: #2ecc71;
+  color: white;
+  border: none;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+.search-bar button:hover {
+  background-color: #27ae60;
+}
+
+/* ========== NAVIGATION ==========
+ Barre de navigation horizontale simple
+============================= */
+nav {
+  background-color: #27ae60;
+  padding: 15px;
+}
+
+nav ul {
+  list-style: none;
+  display: flex;
+  justify-content: space-around;
+  flex-wrap: wrap;
+}
+
+nav li a {
+  color: white;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+nav li a:hover {
+  text-decoration: underline;
+}
+
+/* ========== FOOTER ==========
+ Pied de page discret et centré
+============================= */
+footer {
+  text-align: center;
+  padding: 20px;
+  font-size: 0.9rem;
+  background-color: #f0f0f0;
+  margin-top: 50px;
+}
+
+.alert {
+  background-color: #fdd;
+  color: #b00;
+  padding: 10px;
+  border: 1px solid #f99;
+  border-radius: 5px;
+  margin-bottom: 20px;
+  font-weight: bold;
+}
