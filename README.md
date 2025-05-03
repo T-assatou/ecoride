@@ -1,12 +1,12 @@
 # EcoRide
 
-🌱 **Présentation**  
+ **Présentation**  
 EcoRide est une plateforme de covoiturage écologique développée dans le cadre du Titre Professionnel Développeur Web et Web Mobile (DWWM).  
 L’objectif est de réduire l’impact environnemental des déplacements en facilitant les trajets partagés.
 
 ---
 
-🚀 **Technologies utilisées**
+**Technologies utilisées**
 
 - HTML5 / CSS3  
 - JavaScript (fonctionnalités simples)  
@@ -18,7 +18,7 @@ L’objectif est de réduire l’impact environnemental des déplacements en fac
 
 ---
 
-📁 **Structure du projet**
+**Structure du projet**
 
 ecoride/  
 ├── index.php                => Page d’accueil  
@@ -31,7 +31,7 @@ ecoride/
 
 ---
 
-🧪 **Identifiants de test**
+ **Identifiants de test**
 
 - **Utilisateur**  
   Email : `test@ecoride.fr`  
@@ -47,7 +47,7 @@ ecoride/
 
 ---
 
-⚙️ **Installation en local avec MAMP (Mac)**
+ **Installation en local avec MAMP (Mac)**
 
 1. Placer le dossier `ecoride` dans `/Applications/MAMP/htdocs/`
 2. Démarrer MAMP (Apache + MySQL)
@@ -57,7 +57,7 @@ ecoride/
 
 ---
 
-✅ **Fonctionnalités réalisées**
+**Fonctionnalités réalisées**
 
 - Page d’accueil
 - Authentification utilisateur
@@ -72,6 +72,6 @@ ecoride/
 
 ---
 
-🧠 **Auteur**
+**Auteur**
 
 Projet réalisé par **T-assatou** dans le cadre du TP DWWM - Studi.
