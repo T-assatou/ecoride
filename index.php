@@ -6,6 +6,7 @@
     <title>EcoRide - Accueil</title> <!-- Titre de l'onglet du navigateur -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0"> <!-- Responsive pour mobile -->
     <link rel="stylesheet" href="assets/css/style.css"> <!-- Lien vers la feuille de style CSS -->
+    <link rel="stylesheet" href="assets/css/admin.css">
 </head>
 <body>
 
