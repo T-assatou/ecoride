@@ -1,31 +1,60 @@
 <?php
-require_once('models/db.php');
-
-// ===========================================
+// ============================
 // Fichier : insert-user.php
-// Rôle : Insère un utilisateur avec mot de passe sécurisé
-// ===========================================
+// Rôle : Traite le formulaire de création de compte
+// ============================
 
-// Préparation des données
-$pseudo = 'TestUser';
-$email = 'test@ecoride.fr';
-$password = password_hash('123456', PASSWORD_DEFAULT); // Sécurisation du mot de passe
-$credits = 20;
-$role = 'utilisateur';
+require_once('models/db.php'); // Connexion à la base
+session_start();
 
-try {
-    $sql = "INSERT INTO users (pseudo, email, password, credits, role) VALUES (:pseudo, :email, :password, :credits, :role)";
-    $stmt = $pdo->prepare($sql);
-    $stmt->execute([
-        ':pseudo' => $pseudo,
-        ':email' => $email,
-        ':password' => $password,
-        ':credits' => $credits,
-        ':role' => $role
-    ]);
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $pseudo = $_POST['pseudo'] ?? '';
+    $email = $_POST['email'] ?? '';
+    $password = $_POST['password'] ?? '';
 
-    echo "✅ Utilisateur TestUser inséré avec succès (mot de passe sécurisé).";
-} catch (Exception $e) {
-    echo "❌ Erreur lors de l'insertion : " . $e->getMessage();
+    // Vérifie que tous les champs sont remplis
+    if (!empty($pseudo) && !empty($email) && !empty($password)) {
+
+        // Vérifie si l’email existe déjà
+        $stmt = $pdo->prepare("SELECT id FROM users WHERE email = :email");
+        $stmt->execute([':email' => $email]);
+
+        if ($stmt->fetch()) {
+            echo "<p style='color:red;'>🚫 Cet email est déjà utilisé. Veuillez en choisir un autre.</p>";
+            exit;
+        }
+
+        // Hachage du mot de passe
+        $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
+
+        // Création de l’utilisateur avec rôle par défaut "utilisateur" et actif = 1
+        $stmt = $pdo->prepare("INSERT INTO users (pseudo, email, password, credits, role, actif)
+                               VALUES (:pseudo, :email, :password, 0, 'utilisateur', 1)");
+        $stmt->execute([
+            ':pseudo' => $pseudo,
+            ':email' => $email,
+            ':password' => $hashedPassword
+        ]);
+
+        echo "<p style='color:green;'>✅ Compte créé avec succès ! Vous pouvez maintenant vous connecter.</p>";
+        echo "<p><a href='pages/login.php'>Aller à la page de connexion</a></p>";
+        exit;
+
+    } else {
+        echo "<p style='color:red;'>⚠️ Merci de remplir tous les champs.</p>";
+    }
 }
+
+
+// Après l’insertion réussie dans la base
+echo "<p style='color:green;'>✅ Compte créé avec succès ! Vous allez être redirigé vers la page de connexion...</p>";
+
+// Redirection automatique après 3 secondes
+echo "<script>
+    setTimeout(function() {
+        window.location.href = 'pages/login.php';
+    }, 3000); // 3000 ms = 3 secondes
+</script>";
+exit;
 ?>
+

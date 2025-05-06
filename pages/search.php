@@ -4,9 +4,9 @@
 // Rôle : Page publique pour chercher des covoiturages
 // ============================
 
-require_once('../models/db.php');
+require_once('../models/db.php'); // Connexion à la base de données
 
-// Initialisation des variables
+// Initialisation du tableau des résultats
 $results = [];
 
 if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['depart'], $_GET['arrivee'], $_GET['date'])) {
@@ -14,19 +14,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['depart'], $_GET['arrive
     $arrivee = $_GET['arrivee'];
     $date = $_GET['date'];
 
-    // Rechercher les trajets correspondants
+    // ✅ Requête pour chercher les trajets du même jour, quelle que soit l'heure
     $sql = "SELECT rides.*, vehicles.marque, vehicles.modele
             FROM rides
             INNER JOIN vehicles ON rides.vehicle_id = vehicles.id
             WHERE rides.depart = :depart
             AND rides.arrivee = :arrivee
-            AND rides.date_depart = :date_depart";
+            AND DATE(rides.date_depart) = :date";  // 💡 ici on compare seulement la date
 
     $stmt = $pdo->prepare($sql);
     $stmt->execute([
         ':depart' => $depart,
         ':arrivee' => $arrivee,
-        ':date_depart' => $date
+        ':date' => $date
     ]);
 
     $results = $stmt->fetchAll();
@@ -51,6 +51,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['depart'], $_GET['arrive
 
 <main>
 
+<!-- Formulaire de recherche -->
 <section>
     <h2>Formulaire de recherche</h2>
     <form action="search.php" method="get">
@@ -67,7 +68,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['depart'], $_GET['arrive
     </form>
 </section>
 
-<!-- Résultats de recherche -->
+<!-- Résultats -->
 <section>
     <h2>Résultats</h2>
 
@@ -75,13 +76,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['depart'], $_GET['arrive
         <ul>
             <?php foreach ($results as $ride): ?>
                 <li>
-                    <strong>Départ :</strong> <?php echo htmlspecialchars($ride['depart']); ?> → 
-                    <strong>Arrivée :</strong> <?php echo htmlspecialchars($ride['arrivee']); ?><br>
-                    <strong>Date :</strong> <?php echo htmlspecialchars($ride['date_depart']); ?><br>
-                    <strong>Prix :</strong> <?php echo htmlspecialchars($ride['prix']); ?> €<br>
-                    <strong>Véhicule :</strong> <?php echo htmlspecialchars($ride['marque']) . ' ' . htmlspecialchars($ride['modele']); ?><br>
-                    <a href="participate.php?ride_id=<?php echo $ride['id']; ?>">Participer à ce covoiturage</a>
-
+                    <strong>Départ :</strong> <?= htmlspecialchars($ride['depart']) ?> → 
+                    <strong>Arrivée :</strong> <?= htmlspecialchars($ride['arrivee']) ?><br>
+                    <strong>Date :</strong> <?= htmlspecialchars($ride['date_depart']) ?><br>
+                    <strong>Prix :</strong> <?= htmlspecialchars($ride['prix']) ?> €<br>
+                    <strong>Véhicule :</strong> <?= htmlspecialchars($ride['marque']) . ' ' . htmlspecialchars($ride['modele']) ?><br>
+                    <a href="participate.php?ride_id=<?= $ride['id'] ?>">Participer à ce covoiturage</a>
                 </li>
                 <hr>
             <?php endforeach; ?>
