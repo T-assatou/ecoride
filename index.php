@@ -5,8 +5,12 @@
     <meta charset="UTF-8"> <!-- Autorise les accents et caractères spéciaux -->
     <title>EcoRide - Accueil</title> <!-- Titre de l'onglet du navigateur -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0"> <!-- Responsive pour mobile -->
-    <link rel="stylesheet" href="assets/css/style.css"> <!-- Lien vers la feuille de style CSS -->
-    <link rel="stylesheet" href="assets/css/admin.css">
+    <link rel="stylesheet" href="Assets/css/style.css"> <!-- Lien vers la feuille de style CSS -->
+
+    <head>
+
+</head>
+    
 </head>
 <body>
 
@@ -28,7 +32,7 @@
             en encourageant le covoiturage responsable.
         </p>
         <!-- Image illustrative -->
-        <img src="https://images.unsplash.com/photo-1530639836705-324a0fd6ef38?auto=format&fit=crop&w=1000&q=80" alt="Voiture écologique" width="300">
+        <img src="assets/img/home.jpg" alt="Co-voiturage dans une voiture écologique" width="300">
     </section>
 
     <!-- Formulaire de recherche d'itinéraires -->
