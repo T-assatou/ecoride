@@ -1,130 +1,233 @@
-/* ============================
-   Fichier : assets/css/style.css
-   Rôle : Appliquer les styles (couleurs, marges, polices...) à l'ensemble du site EcoRide
-============================= */
+:***REMOVED*** {
+  --vert-eau: #BCE3C3;
+  --jaune-paille: #FFF8D2;
+  --olive-pastel: #D7E7A9;
+  --bleu-pastel: #C9E3ED;
+  --terre-rose: #EAD5C0;
+  --gris-pastel: #F0F0F0;
+  --texte-sombre: #2C2C2C;
+  --accent: #6B9080;
+  --ocre-signal: #C26A33;
+  --orange-doux: #f6af4c;
+  --bleu-clair: #106C97;
+}
 
-/* ========== RESET ==========
-   Supprime les marges et paddings par défaut du navigateur
-   box-sizing: border-box permet de mieux gérer les tailles d’éléments
-============================= */
+/* RESET */
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
 }
 
-/* ========== BODY ==========
- Police globale + fond + mise en page basique
-============================= */
+/* BODY */
 body {
   font-family: Arial, sans-serif;
-  background-color: #f9fdf9; /* Vert très pâle, ton écologique */
+  background-color: var(--jaune-paille);
+  color: var(--texte-sombre);
   line-height: 1.6;
   padding: 20px;
-  color: #333;
 }
 
-/* ========== HEADER ==========
- Zone d’en-tête avec fond vert + texte centré
-============================= */
+/* HEADER */
 header {
   text-align: center;
-  background-color: #2ecc71; /* Vert vif éco */
-  color: white;
+  background-color: var(--olive-pastel);
+  color: var(--texte-sombre);
   padding: 30px 10px;
+  border-bottom: 2px solid var(--olive-pastel);
 }
 
-/* ========== SECTION ==========
- Mise en page des blocs de contenu
-============================= */
-section {
-  margin: 30px auto;
-  max-width: 700px;
-  text-align: center;
-}
-
-section img {
-  margin-top: 15px;
-  border-radius: 10px;
-  max-width: 100%;
-}
-
-/* ========== FORMULAIRE DE RECHERCHE ==========
- Design du bloc de recherche dans index.php
-============================= */
-.search-bar {
-  background-color: #eafbe7; /* Vert très clair */
-  padding: 20px;
-  border-radius: 10px;
-  margin-top: 30px;
-}
-
-.search-bar form {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  margin-top: 10px;
-}
-
-.search-bar input, .search-bar button {
-  padding: 10px;
-  font-size: 1rem;
-}
-
-.search-bar button {
-  background-color: #2ecc71;
-  color: white;
-  border: none;
-  cursor: pointer;
-  transition: background 0.3s ease;
-}
-
-.search-bar button:hover {
-  background-color: #27ae60;
-}
-
-/* ========== NAVIGATION ==========
- Barre de navigation horizontale simple
-============================= */
+/* NAVIGATION */
 nav {
-  background-color: #27ae60;
+ /* background-color: var(--olive-pastel);*/
   padding: 15px;
 }
-
 nav ul {
   list-style: none;
   display: flex;
   justify-content: space-around;
   flex-wrap: wrap;
 }
-
 nav li a {
-  color: white;
+  color: var( --bleu-clair);
   text-decoration: none;
   font-weight: bold;
 }
-
 nav li a:hover {
-  text-decoration: underline;
+  color: var(--ocre-signal);
 }
 
-/* ========== FOOTER ==========
- Pied de page discret et centré
-============================= */
+/* SECTION */
+section {
+  margin: 30px auto;
+  max-width: 700px;
+  text-align: center;
+  background-color: white;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 0 5px #ccc;
+}
+section img {
+  margin-top: 15px;
+  border-radius: 10px;
+  max-width: 100%;
+}
+
+/* FORMULAIRE DE RECHERCHE */
+.search-bar {
+  background-color: var(--bleu-pastel);
+  color: var(--texte-sombre);
+  padding: 20px;
+  border-radius: 10px;
+  margin-top: 30px;
+}
+.search-bar form {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.search-bar input,
+.search-bar button {
+  padding: 10px;
+  font-size: 1rem;
+}
+.search-bar button {
+  background-color: var(--accent);
+  color: white;
+  border: none;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+.search-bar button:hover {
+  background-color: #50766e;
+}
+
+
+form label {
+  margin-top: 10px;
+  font-weight: bold;
+  display: block;
+}
+
+form input,
+form select,
+form textarea,
+form button {
+  width: 100%;
+  padding: 10px;
+  margin-top: 5px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+}
+
+/* FOOTER */
 footer {
   text-align: center;
   padding: 20px;
   font-size: 0.9rem;
-  background-color: #f0f0f0;
+  background-color: var(--vert-eau);
+  color: var(--texte-sombre);
   margin-top: 50px;
+  border-top: 1px solid var(--olive-pastel);
 }
 
+/* MESSAGES */
 .alert {
-  background-color: #fdd;
-  color: #b00;
+  background-color: #ffe5e5;
+  color: #a30000;
   padding: 10px;
   border: 1px solid #f99;
   border-radius: 5px;
   margin-bottom: 20px;
   font-weight: bold;
+}
+.success-message {
+  color: green;
+  font-weight: bold;
+  margin: 20px;
+}
+.error-message {
+  color: red;
+  font-weight: bold;
+  margin: 20px;
+}
+
+/* BOUTONS */
+.btn-green,
+.btn-blue,
+.admin-button {
+  display: inline-block;
+  padding: 8px 12px;
+  color: white;
+  text-decoration: none;
+  border-radius: 5px;
+}
+.btn-green {
+  background-color: var(--accent);
+}
+.btn-blue {
+  background-color: #74a8bd;
+}
+.admin-button {
+  background-color: var(--accent);
+  margin: 5px 0;
+}
+.admin-button.green {
+  background-color: #88c999;
+}
+.admin-button.red {
+  background-color: #e97451;
+}
+.admin-button.alt {
+  background-color: var(--texte-sombre);
+  padding: 10px 15px;
+  margin-top: 15px;
+  margin-right: 10px;
+}
+
+/* BLOCS */
+.ride-box,
+.ride-card,
+.admin-card {
+  border: 1px solid var(--gris-pastel);
+  background-color: white;
+  color: var(--texte-sombre);
+  padding: 10px;
+  margin-bottom: 15px;
+  border-radius: 6px;
+}
+.ride-card {
+  padding: 15px;
+  margin-bottom: 20px;
+  border-radius: 8px;
+}
+
+/* FORMULAIRES */
+.form-section {
+  max-width: 500px;
+  margin: auto;
+  padding: 1rem;
+}
+.form-create-user input,
+.form-create-user label,
+.form-create-user button {
+  display: block;
+  width: 100%;
+  margin-bottom: 10px;
+}
+
+/* ADMIN */
+.admin-section {
+  margin: 30px auto;
+  max-width: 800px;
+  padding: 20px;
+  border-bottom: 1px solid var(--gris-pastel);
+}
+
+/* TEXTE COLORÉ */
+.confirm-action.red {
+  color: red;
+}
+.confirm-action.green {
+  color: green;
 }
