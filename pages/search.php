@@ -1,35 +1,69 @@
 <?php
 // ============================
 // Fichier : pages/search.php
-// Rôle : Page publique pour chercher des covoiturages
+// Rôle : Recherche et filtres des covoiturages pour visiteurs
 // ============================
 
-require_once('../models/db.php'); // Connexion à la base de données
+require_once('../models/db.php');
+session_start();
 
-// Initialisation du tableau des résultats
 $results = [];
+$message = "";
 
+// Traitement de la recherche
 if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['depart'], $_GET['arrivee'], $_GET['date'])) {
-    $depart = $_GET['depart'];
-    $arrivee = $_GET['arrivee'];
+    $depart = trim($_GET['depart']);
+    $arrivee = trim($_GET['arrivee']);
     $date = $_GET['date'];
 
-    // ✅ Requête pour chercher les trajets du même jour, quelle que soit l'heure
-    $sql = "SELECT rides.*, vehicles.marque, vehicles.modele
-            FROM rides
-            INNER JOIN vehicles ON rides.vehicle_id = vehicles.id
-            WHERE rides.depart = :depart
-            AND rides.arrivee = :arrivee
-            AND DATE(rides.date_depart) = :date";  // 💡 ici on compare seulement la date
+    if ($depart && $arrivee && $date) {
+        // Requête principale
+        $sql = "SELECT rides.*, vehicles.marque, vehicles.modele, vehicles.energie, users.pseudo
+                FROM rides
+                INNER JOIN vehicles ON rides.vehicle_id = vehicles.id
+                INNER JOIN users ON rides.user_id = users.id
+                WHERE rides.depart = :depart
+                AND rides.arrivee = :arrivee
+                AND DATE(rides.date_depart) = :date
+                AND rides.places > 0";
 
-    $stmt = $pdo->prepare($sql);
-    $stmt->execute([
-        ':depart' => $depart,
-        ':arrivee' => $arrivee,
-        ':date' => $date
-    ]);
+        $params = [
+            ':depart' => $depart,
+            ':arrivee' => $arrivee,
+            ':date' => $date
+        ];
 
-    $results = $stmt->fetchAll();
+        // Filtres facultatifs
+        if (!empty($_GET['ecolo'])) {
+            $sql .= " AND vehicles.energie = 'électrique'";
+        }
+
+        if (!empty($_GET['prix_max'])) {
+            $sql .= " AND rides.prix <= :prix_max";
+            $params[':prix_max'] = (float) $_GET['prix_max'];
+        }
+
+        if (!empty($_GET['duree_max'])) {
+            $sql .= " AND TIMESTAMPDIFF(MINUTE, rides.date_depart, rides.date_arrivee) <= :duree_max";
+            $params[':duree_max'] = (int) $_GET['duree_max'];
+        }
+
+        if (!empty($_GET['note_min'])) {
+            // Simulation : tous les conducteurs ont 4★ par défaut
+            $sql .= " AND 4 >= :note_min"; 
+            $params[':note_min'] = (float) $_GET['note_min'];
+        }
+
+        $stmt = $pdo->prepare($sql);
+        $stmt->execute($params);
+        $results = $stmt->fetchAll();
+
+        if (empty($results)) {
+            $message = "Aucun covoiturage trouvé pour ces critères.";
+        }
+    } else {
+        $message = "Veuillez renseigner la ville de départ, d’arrivée et la date.";
+    }
 }
 ?>
 
@@ -38,7 +72,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['depart'], $_GET['arrive
 <head>
     <meta charset="UTF-8">
     <title>Rechercher un covoiturage - EcoRide</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="../assets/css/style.css">
 </head>
 <body>
@@ -51,50 +84,61 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['depart'], $_GET['arrive
 
 <main>
 
-<!-- Formulaire de recherche -->
-<section>
-    <h2>Formulaire de recherche</h2>
-    <form action="search.php" method="get">
+<section class="search-bar">
+    <form method="get" action="search.php">
         <label for="depart">Ville de départ :</label>
         <input type="text" name="depart" id="depart" required>
 
-        <label for="arrivee">Ville d'arrivée :</label>
+        <label for="arrivee">Ville d’arrivée :</label>
         <input type="text" name="arrivee" id="arrivee" required>
 
         <label for="date">Date de départ :</label>
         <input type="date" name="date" id="date" required>
 
-        <button type="submit">Rechercher</button>
+        <hr>
+
+        <label><input type="checkbox" name="ecolo"> Uniquement les trajets écologiques</label>
+
+        <label for="prix_max">Prix maximum (€) :</label>
+        <input type="number" name="prix_max" id="prix_max" min="0" step="0.5">
+
+        <label for="duree_max">Durée maximale (minutes) :</label>
+        <input type="number" name="duree_max" id="duree_max" min="0">
+
+        <label for="note_min">Note minimale :</label>
+        <input type="number" name="note_min" id="note_min" min="0" max="5" step="0.1">
+
+        <button type="submit">🔍 Rechercher</button>
     </form>
 </section>
 
-<!-- Résultats -->
 <section>
     <h2>Résultats</h2>
-
-    <?php if (!empty($results)): ?>
-        <ul>
-            <?php foreach ($results as $ride): ?>
-                <li>
-                    <strong>Départ :</strong> <?= htmlspecialchars($ride['depart']) ?> → 
-                    <strong>Arrivée :</strong> <?= htmlspecialchars($ride['arrivee']) ?><br>
-                    <strong>Date :</strong> <?= htmlspecialchars($ride['date_depart']) ?><br>
-                    <strong>Prix :</strong> <?= htmlspecialchars($ride['prix']) ?> €<br>
-                    <strong>Véhicule :</strong> <?= htmlspecialchars($ride['marque']) . ' ' . htmlspecialchars($ride['modele']) ?><br>
-                    <a href="participate.php?ride_id=<?= $ride['id'] ?>">Participer à ce covoiturage</a>
-                </li>
-                <hr>
-            <?php endforeach; ?>
-        </ul>
-    <?php else: ?>
-        <p>Aucun covoiturage trouvé pour votre recherche.</p>
+    <?php if ($message): ?>
+        <p class="error-message"><?= htmlspecialchars($message) ?></p>
     <?php endif; ?>
 
+    <?php if (!empty($results)): ?>
+        <?php foreach ($results as $ride): ?>
+            <div class="ride-box">
+                <p><strong>Départ :</strong> <?= htmlspecialchars($ride['depart']) ?> → 
+                   <strong>Arrivée :</strong> <?= htmlspecialchars($ride['arrivee']) ?></p>
+                <p><strong>Date :</strong> <?= htmlspecialchars($ride['date_depart']) ?></p>
+                <p><strong>Heure d’arrivée :</strong> <?= htmlspecialchars($ride['date_arrivee']) ?></p>
+                <p><strong>Prix :</strong> <?= htmlspecialchars($ride['prix']) ?> €</p>
+                <p><strong>Places restantes :</strong> <?= htmlspecialchars($ride['places']) ?></p>
+                <p><strong>Chauffeur :</strong> <?= htmlspecialchars($ride['pseudo']) ?> (Note : 4★ simulée)</p>
+                <p><strong>Véhicule :</strong> <?= htmlspecialchars($ride['marque']) ?> <?= htmlspecialchars($ride['modele']) ?> - <?= $ride['energie'] ?></p>
+                <?php if ($ride['energie'] === 'électrique'): ?>
+                    <p>🌱 Voyage écologique</p>
+                <?php endif; ?>
+                <a href="details.php?id=<?= $ride['id'] ?>" class="btn-blue">Détail</a>
+            </div>
+        <?php endforeach; ?>
+    <?php endif; ?>
 </section>
 
 </main>
-
 <?php include('../includes/footer.php'); ?>
-
 </body>
 </html>
