@@ -1,0 +1,84 @@
+===========================
+📘 Fichier : _fonctionnalites_du_projet.txt
+But : Expliquer ce que fait chaque page visible côté utilisateur
+===========================
+
+🔐 pages/login.php
+- Affiche un formulaire de connexion.
+- L'utilisateur entre son email et son mot de passe.
+- Envoie les données à authController.php pour vérification.
+
+🆕 pages/register.php
+- Formulaire d'inscription.
+- L'utilisateur entre pseudo, email et mot de passe.
+- Envoie les données à insert-user.php pour créer un nouveau compte.
+
+👤 pages/user-space.php
+- Espace personnel d’un utilisateur connecté.
+- Permet de :
+  - Voir son rôle actuel (chauffeur, passager…)
+  - Ajouter un véhicule
+  - Créer un trajet
+  - Voir ses trajets réservés
+  - Donner un avis ou signaler un litige
+
+🔎 pages/search.php
+- Page publique accessible sans connexion.
+- Permet de rechercher un trajet selon ville de départ, d’arrivée et date.
+- Affiche les résultats avec bouton pour réserver.
+
+📥 pages/participate.php
+- Page appelée lorsqu’un utilisateur clique sur "Participer à ce trajet".
+- Insère l'utilisateur dans la table participants.
+- Décrémente le nombre de places disponibles.
+
+❌ pages/cancel_participation.php
+- Annule une participation à un covoiturage.
+- Supprime l’entrée de la table participants.
+- Incrémente à nouveau les places disponibles.
+
+✍️ pages/submit-avis.php
+- Permet à un passager de laisser un avis sur un chauffeur.
+
+⚠️ pages/submit-litige.php
+- Permet à un passager de signaler un problème (litige).
+
+🛠️ pages/employe-space.php
+- Réservé au rôle “employé”.
+- Valide les avis reçus.
+- Consulte les litiges.
+
+👑 pages/admin-control.php
+- Réservé à l’administrateur.
+- Liste tous les trajets, leurs participants.
+- Gère les utilisateurs (suspendre/réactiver).
+- Lien vers dashboard (facultatif).
+
+➕ pages/create-employee.php
+- Formulaire pour créer un compte employé.
+
+🚪 controllers/logout.php
+- Déconnecte l’utilisateur et détruit la session.
+
+✅ controllers/authController.php
+- Vérifie l’email et mot de passe.
+- Redirige l’utilisateur selon son rôle.
+
+🧱 controllers/auth.php
+- Vérifie que l’utilisateur est connecté.
+- Redirige vers login s’il ne l’est pas.
+
+📦 controllers/rideController.php
+- Insère un trajet dans la base de données depuis user-space.php
+
+👤 controllers/userController.php
+- Insère un nouvel utilisateur dans la base depuis register.php
+
+📁 includes/nav.php / footer.php
+- Barre de navigation & pied de page inclus automatiquement dans chaque page.
+
+📄 README.md
+- Résumé du projet, instructions d’installation, identifiants de test
+
+🗃️ ecoride.sql
+- Script de création et de peuplement de la base de données.

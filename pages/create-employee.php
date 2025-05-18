@@ -9,36 +9,44 @@ session_start();
 
 // Vérifie que seul l'admin peut accéder à cette page
 if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'admin') {
-    echo "Accès refusé.";
+    header("Location: login.php");
     exit;
 }
 
-// Traitement du formulaire
+$message = '';
+
+// Traitement du formulaire d’inscription
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $pseudo = $_POST['pseudo'] ?? '';
-    $email = $_POST['email'] ?? '';
+    $pseudo = trim($_POST['pseudo'] ?? '');
+    $email = trim($_POST['email'] ?? '');
     $password = $_POST['password'] ?? '';
 
-    if (!empty($pseudo) && !empty($email) && !empty($password)) {
-        // Hachage du mot de passe
-        $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
+    // Vérifie que tous les champs sont remplis
+    if ($pseudo && $email && $password) {
+        // Vérifie si l’email est déjà pris
+        $check = $pdo->prepare("SELECT id FROM users WHERE email = :email");
+        $check->execute([':email' => $email]);
 
-        // Création du compte dans la BDD
-        $sql = "INSERT INTO users (pseudo, email, password, credits, role) VALUES (:pseudo, :email, :password, :credits, :role)";
-        $stmt = $pdo->prepare($sql);
-        $stmt->execute([
-            ':pseudo' => $pseudo,
-            ':email' => $email,
-            ':password' => $hashedPassword,
-            ':credits' => 0,
-            ':role' => 'employe'
-        ]);
+        if ($check->fetch()) {
+            $message = "🚫 Cet email est déjà utilisé.";
+        } else {
+            // Hachage du mot de passe
+            $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
 
-        // Redirection vers le panneau admin
-        header("Location: admin-control.php");
-        exit;
+            // Insertion de l'employé
+            $stmt = $pdo->prepare("INSERT INTO users (pseudo, email, password, credits, role, actif)
+                                   VALUES (:pseudo, :email, :password, 0, 'employe', 1)");
+            $stmt->execute([
+                ':pseudo' => $pseudo,
+                ':email' => $email,
+                ':password' => $hashedPassword
+            ]);
+
+            header("Location: admin-control.php");
+            exit;
+        }
     } else {
-        $message = "Veuillez remplir tous les champs.";
+        $message = "⚠️ Merci de remplir tous les champs.";
     }
 }
 ?>
@@ -48,19 +56,22 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <head>
     <meta charset="UTF-8">
     <title>Créer un employé - EcoRide</title>
-    <link rel="stylesheet" href="../assets/css/style.css">
+    <link rel="stylesheet" href="../Assets/css/style.css">
 </head>
 <body>
 <?php include('../includes/nav.php'); ?>
 
 <header>
-    <h1>Création d'un compte employé</h1>
+    <h1>Créer un compte employé</h1>
 </header>
-<main>
-<section>
-    <?php if (!empty($message)) echo '<p style="color:red">' . $message . '</p>'; ?>
 
-    <form action="" method="post">
+<main>
+<section class="form-section">
+    <?php if ($message): ?>
+        <p class="error-message"><?= htmlspecialchars($message) ?></p>
+    <?php endif; ?>
+
+    <form action="" method="post" class="form-create-user">
         <label for="pseudo">Pseudo :</label>
         <input type="text" name="pseudo" id="pseudo" required>
 
@@ -70,7 +81,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <label for="password">Mot de passe :</label>
         <input type="password" name="password" id="password" required>
 
-        <button type="submit">Créer l'employé</button>
+        <button type="submit">Créer l’employé</button>
     </form>
 </section>
 </main>

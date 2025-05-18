@@ -1,0 +1,34 @@
+/*
+FICHIER : controllers/insert-user.php
+
+OBJECTIF :
+Ce script permet d'enregistrer un nouvel utilisateur dans la base de données.
+
+FONCTIONNEMENT :
+- Vérifie que les champs du formulaire sont bien remplis (pseudo, email, mot de passe)
+- Vérifie si l’email n’est pas déjà utilisé
+- Hache le mot de passe pour sécuriser les données
+- Enregistre l’utilisateur dans la table `users` avec :
+  - 0 crédits
+  - rôle "utilisateur"
+  - actif = 1
+- Redirige l’utilisateur vers la page de connexion
+
+SÉCURITÉ :
+- Empêche l'injection SQL avec des requêtes préparées
+- Utilise `password_hash` pour protéger les mots de passe
+*/
+
+
+
+controllers/userController.php :
+Ce fichier traite l'inscription des nouveaux utilisateurs.
+- Il vérifie que tous les champs du formulaire sont remplis.
+- Il protège le mot de passe avec un hachage sécurisé (password_hash).
+- Il utilise des requêtes préparées pour se protéger des injections SQL.
+- Il crée automatiquement un compte avec le rôle "utilisateur" et un crédit initial de 0.
+- En cas de succès, il redirige vers la page de connexion.
+
+
+
+
