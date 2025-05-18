@@ -89,9 +89,23 @@ $stmt = $pdo->prepare("SELECT rides.*, vehicles.marque, vehicles.modele
     INNER JOIN rides ON participants.ride_id = rides.id
     INNER JOIN vehicles ON rides.vehicle_id = vehicles.id
     WHERE participants.user_id = :user_id
+    AND rides.date_arrivee >= NOW()
     ORDER BY rides.date_depart DESC");
 $stmt->execute([':user_id' => $_SESSION['user_id']]);
 $reserved_rides = $stmt->fetchAll();
+
+// ====================================
+// Récupération de l'historique des trajets terminés (US10)
+// ====================================
+$stmt = $pdo->prepare("SELECT rides.*, vehicles.marque, vehicles.modele
+    FROM participants
+    INNER JOIN rides ON participants.ride_id = rides.id
+    INNER JOIN vehicles ON rides.vehicle_id = vehicles.id
+    WHERE participants.user_id = :user_id
+    AND rides.date_arrivee < NOW()
+    ORDER BY rides.date_arrivee DESC");
+$stmt->execute([':user_id' => $_SESSION['user_id']]);
+$past_rides = $stmt->fetchAll();
 ?>
 
 <!DOCTYPE html>
@@ -109,6 +123,7 @@ $reserved_rides = $stmt->fetchAll();
         <p style="color:green;"><strong><?= $message ?></strong></p>
     <?php endif; ?>
 
+    <!-- Changement de rôle -->
     <section>
         <form method="post">
             <label>Changer de rôle :</label>
@@ -174,10 +189,10 @@ $reserved_rides = $stmt->fetchAll();
     <?php endif; ?>
 <?php endif; ?>
 
-<!-- Trajets réservés -->
+<!-- Trajets réservés à venir -->
 <?php if (!empty($reserved_rides)): ?>
     <section>
-        <h2>🧍‍♂️ Covoiturages réservés</h2>
+        <h2>🧍‍♂️ Covoiturages à venir</h2>
         <ul>
             <?php foreach ($reserved_rides as $r): ?>
                 <li><strong><?= $r['depart'] ?> → <?= $r['arrivee'] ?></strong> (<?= $r['date_depart'] ?>) - <?= $r['prix'] ?> €<br>
@@ -186,6 +201,20 @@ $reserved_rides = $stmt->fetchAll();
                     <button type="submit">❌ Annuler ma participation</button>
                 </form>
                 </li>
+            <?php endforeach; ?>
+        </ul>
+    </section>
+<?php endif; ?>
+
+<!-- Historique des trajets (US10) -->
+<?php if (!empty($past_rides)): ?>
+    <section>
+        <h2>📜 Historique de mes covoiturages</h2>
+        <ul>
+            <?php foreach ($past_rides as $r): ?>
+                <li><strong><?= $r['depart'] ?> → <?= $r['arrivee'] ?></strong><br>
+                Arrivée le <?= date('d/m/Y', strtotime($r['date_arrivee'])) ?> -
+                Prix : <?= $r['prix'] ?> €</li>
             <?php endforeach; ?>
         </ul>
     </section>
