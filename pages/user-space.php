@@ -195,4 +195,6 @@ $bookings = $stmt->fetchAll();
 </main>
 <?php include('../includes/footer.php'); ?>
 </body>
+
 </html>
+
