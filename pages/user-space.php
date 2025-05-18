@@ -194,3 +194,4 @@ $reserved_rides = $stmt->fetchAll();
 <?php include('../includes/footer.php'); ?>
 </body>
 </html>
+<!-- US9 : Trajet ajouté par utilisateur -->
