@@ -1,50 +1,63 @@
 <?php
 // ============================
 // Fichier : controllers/userController.php
-// Rôle : Traite les données du formulaire d’inscription
-// Enregistre un nouvel utilisateur dans la base de données
+// Rôle : Gérer l'inscription utilisateur
 // ============================
 
-// Connexion à la base
 require_once('../models/db.php');
+session_start();
 
-// Vérifie si le formulaire a été soumis
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-
-    // Récupère les champs du formulaire
-    $pseudo = $_POST['pseudo'] ?? '';
-    $email = $_POST['email'] ?? '';
+    $pseudo = trim($_POST['pseudo'] ?? '');
+    $email = trim($_POST['email'] ?? '');
     $password = $_POST['password'] ?? '';
 
-    // Vérifie que tous les champs sont remplis (sécurité minimale)
-    if (!empty($pseudo) && !empty($email) && !empty($password)) {
-
-        // Hachage du mot de passe (sécurité obligatoire)
-        $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
-
-        // Préparation de la requête SQL
-        $sql = "INSERT INTO users (pseudo, email, password) VALUES (:pseudo, :email, :password)";
-        $stmt = $pdo->prepare($sql);
-
-        // Exécution avec les données sécurisées
-        try {
-            $stmt->execute([
-                ':pseudo' => $pseudo,
-                ':email' => $email,
-                ':password' => $hashedPassword
-            ]);
-
-            // Redirection vers la page de connexion avec message de succès
-            header("Location: login.php?success=1");
-            exit;
-
-        } catch (PDOException $e) {
-            // Affiche une erreur si l’email est déjà pris
-            echo "Erreur : " . $e->getMessage();
-        }
-
-    } else {
-        echo "Tous les champs sont obligatoires.";
+    // Vérifie que tous les champs sont remplis
+    if (empty($pseudo) || empty($email) || empty($password)) {
+        $_SESSION['message'] = "⚠️ Tous les champs sont obligatoires.";
+        header("Location: ../pages/register.php");
+        exit;
     }
+
+    // 🔐 Vérification de la complexité du mot de passe
+    $longueur = strlen($password);
+    $maj = preg_match('@[A-Z]@', $password);
+    $min = preg_match('@[a-z]@', $password);
+    $chiffre = preg_match('@[0-9]@', $password);
+
+    if ($longueur < 9 || !$maj || !$min || !$chiffre) {
+        $_SESSION['message'] = "❌ Le mot de passe doit contenir au moins 9 caractères, une majuscule, une minuscule et un chiffre.";
+        header("Location: ../pages/register.php");
+        exit;
+    }
+
+    // Vérifie si l'email est déjà utilisé
+    $check = $pdo->prepare("SELECT id FROM users WHERE email = :email");
+    $check->execute([':email' => $email]);
+
+    if ($check->fetch()) {
+        $_SESSION['message'] = "🚫 Cet email est déjà utilisé.";
+        header("Location: ../pages/register.php");
+        exit;
+    }
+
+    // Hashage du mot de passe
+    $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
+
+    // ✅ Insertion dans la BDD avec 20 crédits offerts
+    $stmt = $pdo->prepare("INSERT INTO users (pseudo, email, password, credits, role, actif)
+                           VALUES (:pseudo, :email, :password, 20, 'passager', 1)");
+
+    $stmt->execute([
+        ':pseudo' => $pseudo,
+        ':email' => $email,
+        ':password' => $hashedPassword
+    ]);
+
+    $_SESSION['message'] = "✅ Compte créé avec succès. Vous pouvez vous connecter.";
+    header("Location: ../pages/login.php");
+    exit;
+} else {
+    header("Location: ../pages/register.php");
+    exit;
 }
-?>

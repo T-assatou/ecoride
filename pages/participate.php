@@ -7,14 +7,14 @@
 require_once('../models/db.php');
 session_start();
 
-// Vérifie que l'utilisateur est connecté
+// Vérifie que l'utilisateur est connecté, sinon redirige vers login avec ride_id
+$ride_id = $_GET['ride_id'] ?? null;
+
 if (!isset($_SESSION['user_id'])) {
-    header("Location: login.php");
+    header("Location: login.php?redirect=participate.php&ride_id=" . urlencode($ride_id));
     exit;
 }
 
-// Vérifie que ride_id est passé en GET
-$ride_id = $_GET['ride_id'] ?? null;
 if (!$ride_id) {
     echo "Aucun trajet sélectionné.";
     exit;
@@ -29,35 +29,43 @@ $stmt = $pdo->prepare($sql);
 $stmt->execute([':ride_id' => $ride_id]);
 $ride = $stmt->fetch();
 
-// Vérifie que le trajet existe
 if (!$ride) {
     echo "Trajet non trouvé.";
     exit;
 }
 
-// Vérifie qu'il reste des places
 if ($ride['places'] <= 0) {
-    echo "Désolé, il n'y a plus de place disponible pour ce covoiturage.";
+    echo "Désolé, il n'y a plus de place disponible.";
     exit;
 }
 
-// Traitement si l'utilisateur confirme sa participation
+// Traitement de la participation
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-  // Enregistre la participation dans la table participants
-  $insert = $pdo->prepare("INSERT INTO participants (user_id, ride_id) VALUES (:user_id, :ride_id)");
-  $insert->execute([
-      ':user_id' => $_SESSION['user_id'],
-      ':ride_id' => $ride_id
-  ]);
+    $user_id = $_SESSION['user_id'];
 
-  // On retire une place disponible
-  $updateSql = "UPDATE rides SET places = places - 1 WHERE id = :ride_id AND places > 0";
-  $updateStmt = $pdo->prepare($updateSql);
-  $updateStmt->execute([':ride_id' => $ride_id]);
+    // Vérifie les crédits
+    $stmt = $pdo->prepare("SELECT credits FROM users WHERE id = :id");
+    $stmt->execute([':id' => $user_id]);
+    $user = $stmt->fetch();
 
-  echo "<p>✅ Vous avez réservé une place dans ce covoiturage !</p>";
-  echo '<a href="user-space.php">Voir mes trajets</a>';
-  exit;
+    if ($user['credits'] < 2) {
+        echo "Crédits insuffisants.";
+        exit;
+    }
+
+    // Inscription + retrait crédits + retrait place
+    $pdo->prepare("INSERT INTO participants (user_id, ride_id) VALUES (:user_id, :ride_id)")
+        ->execute([':user_id' => $user_id, ':ride_id' => $ride_id]);
+
+    $pdo->prepare("UPDATE users SET credits = credits - 2 WHERE id = :id")
+        ->execute([':id' => $user_id]);
+
+    $pdo->prepare("UPDATE rides SET places = places - 1 WHERE id = :ride_id")
+        ->execute([':ride_id' => $ride_id]);
+
+    echo "<p>✅ Vous avez réservé une place !</p>";
+    echo '<a href="user-space.php">Voir mes trajets</a>';
+    exit;
 }
 ?>
 
@@ -78,21 +86,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 <main>
     <section>
-        <p><strong>Départ :</strong> <?php echo htmlspecialchars($ride['depart']); ?></p>
-        <p><strong>Arrivée :</strong> <?php echo htmlspecialchars($ride['arrivee']); ?></p>
-        <p><strong>Date de départ :</strong> <?php echo htmlspecialchars($ride['date_depart']); ?></p>
-        <p><strong>Prix :</strong> <?php echo htmlspecialchars($ride['prix']); ?> €</p>
-        <p><strong>Véhicule :</strong> <?php echo htmlspecialchars($ride['marque']) . ' ' . htmlspecialchars($ride['modele']); ?></p>
-        <p><strong>Places disponibles :</strong> <?php echo htmlspecialchars($ride['places']); ?></p>
+        <p><strong>Départ :</strong> <?= htmlspecialchars($ride['depart']) ?></p>
+        <p><strong>Arrivée :</strong> <?= htmlspecialchars($ride['arrivee']) ?></p>
+        <p><strong>Date de départ :</strong> <?= htmlspecialchars($ride['date_depart']) ?></p>
+        <p><strong>Prix :</strong> <?= htmlspecialchars($ride['prix']) ?> €</p>
+        <p><strong>Véhicule :</strong> <?= htmlspecialchars($ride['marque']) ?> <?= htmlspecialchars($ride['modele']) ?></p>
+        <p><strong>Places disponibles :</strong> <?= htmlspecialchars($ride['places']) ?></p>
 
         <!-- Formulaire de confirmation -->
-        <form action="" method="post">
+        <form action="" method="post" onsubmit="return confirm('Utiliser 2 crédits pour ce trajet ?')">
             <button type="submit">Confirmer ma participation</button>
         </form>
     </section>
 </main>
 
 <?php include('../includes/footer.php'); ?>
-
 </body>
 </html>

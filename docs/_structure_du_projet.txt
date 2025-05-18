@@ -1,0 +1,64 @@
+# STRUCTURE DU PROJET ECORIDE
+# ----------------------------
+# Ce document explique le rôle de chaque dossier/fichier dans le projet
+
+📁 /ecoride/
+├── index.php
+│   → Page d’accueil publique du site EcoRide
+│   → Contient un formulaire de recherche et une présentation
+
+├── ecoride.sql
+│   → Fichier de base de données à importer dans phpMyAdmin (tables + données de test)
+
+├── README.md
+│   → Présentation complète du projet : installation, identifiants, fonctionnalités
+
+├── docs/
+│   → Contient les documents PDF et fichiers explicatifs (ex: manuel d'utilisation)
+
+├── assets/
+│   ├── css/
+│   │   ├── style.css        → Styles communs à tout le site
+│   │   └── admin.css        → Styles spécifiques à l’administration
+│   ├── img/
+│   │   └── home.jpg         → Image utilisée sur la page d’accueil
+│   └── js/
+│       └── script.js        → Script JavaScript (confirmation admin, etc.)
+
+├── includes/
+│   ├── nav.php              → Barre de navigation incluse sur chaque page
+│   └── footer.php           → Pied de page commun à toutes les pages
+
+├── models/
+│   ├── db.php               → Connexion à la base de données MySQL
+│   ├── user.php             → (Facultatif) Fonctions liées aux utilisateurs
+│   └── ride.php             → (Facultatif) Fonctions liées aux trajets
+
+├── controllers/
+│   ├── auth.php             → Vérifie que l’utilisateur est connecté et actif
+│   ├── authController.php   → Traite la connexion (email + mot de passe)
+│   ├── logout.php           → Déconnecte l’utilisateur
+│   └── userController.php   → Traite l’inscription (création de compte)
+
+├── pages/
+│   ├── login.php            → Page de connexion
+│   ├── register.php         → Page d’inscription
+│   ├── user-space.php       → Espace personnel (créer trajet, véhicule, avis, litige)
+│   ├── admin-control.php    → Interface de gestion des trajets + utilisateurs pour l’admin
+│   ├── employe-space.php    → Interface employé (avis à valider, litiges)
+│   ├── dashboard.php        → Statistiques ou résumé (admin)
+│   ├── create-employee.php  → Créer un compte employé
+│   ├── search.php           → Rechercher un covoiturage
+│   ├── participate.php      → Réserver un trajet
+│   ├── cancel_participation.php → Annuler une réservation
+│   ├── submit-avis.php      → Envoyer un avis sur un chauffeur
+│   ├── submit-litige.php    → Signaler un litige
+│   ├── suspendre-user.php   → Suspendre ou réactiver un utilisateur (admin)
+│   ├── valider-avis.php     → Valider ou refuser un avis (employé)
+│   └── contact.php          → (optionnel) Page de contact
+
+├── test/
+│   → Dossier de fichiers de test utilisés uniquement pendant le développement
+│   → À NE PAS INCLURE dans la version finale GitHub (mettre dans .gitignore)
+
+# FIN

@@ -1,25 +1,22 @@
 <?php
 // ============================
 // Fichier : pages/dashboard.php
-// Rôle : Dashboard admin avec graphiques statistiques
+// Rôle : Tableau de bord admin avec graphiques statistiques
 // ============================
+
 
 require_once('../models/db.php');
 session_start();
 
-// Vérification : uniquement admin
 if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'admin') {
     echo "Accès refusé.";
     exit;
 }
 
-// Récupérer les trajets créés par jour
 $ridesData = $pdo->query("SELECT DATE(date_depart) as day, COUNT(*) as total FROM rides GROUP BY day ORDER BY day")->fetchAll();
+$creditsData = $pdo->query("SELECT DATE(date_depart) as day, COUNT(*) * 2 as credits FROM rides GROUP BY day ORDER BY day")->fetchAll();
+$totalCredits = $pdo->query("SELECT COUNT(*) * 2 as total FROM rides")->fetch(PDO::FETCH_ASSOC)['total'];
 
-// Récupérer les crédits gagnés par jour (2 crédits prélevés par trajet)
-$creditsData = $pdo->query("SELECT DATE(date_depart) as day, SUM(2) as credits FROM rides GROUP BY day ORDER BY day")->fetchAll();
-
-// Formatter les données pour Chart.js
 $labels = [];
 $ridesCount = [];
 $creditsCount = [];
@@ -28,11 +25,9 @@ foreach ($ridesData as $row) {
     $labels[] = $row['day'];
     $ridesCount[] = $row['total'];
 }
-
 foreach ($creditsData as $row) {
     $creditsCount[] = $row['credits'];
 }
-
 ?>
 
 <!DOCTYPE html>
@@ -41,36 +36,50 @@ foreach ($creditsData as $row) {
     <meta charset="UTF-8">
     <title>Dashboard Admin - EcoRide</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <link rel="stylesheet" href="../assets/css/style.css">
+    <link rel="stylesheet" href="../Assets/css/style.css">
 </head>
 <body>
+
 <?php include('../includes/nav.php'); ?>
 
 <header>
     <h1>Dashboard Administrateur</h1>
 </header>
 
+<p style="text-align:center; font-style:italic;">
+    Analyse quotidienne de l’activité EcoRide
+</p>
+
 <main>
-<section>
-    <h2>📈 Nombre de trajets par jour</h2>
-    <canvas id="ridesChart"></canvas>
-</section>
+    <section>
+        <h2>📈 Nombre de covoiturages par jour</h2>
+        <canvas id="ridesChart"></canvas>
+    </section>
 
-<hr>
+    <hr>
 
-<section>
-    <h2>💰 Crédits gagnés par jour</h2>
-    <canvas id="creditsChart"></canvas>
-</section>
+    <section>
+        <h2>💰 Crédits gagnés par jour</h2>
+        <canvas id="creditsChart"></canvas>
+
+        <div style="margin: 20px auto; background: #eafbe7; padding: 15px; text-align: center; max-width: 400px; border-radius: 10px;">
+            <strong>💼 Total des crédits gagnés par la plateforme :</strong><br>
+            <span style="font-size: 1.4rem; color: green; font-weight: bold;">
+                <?= $totalCredits ?> crédits
+            </span>
+        </div>
+    </section>
+
+    <section style="text-align:center; margin-top: 30px;">
+        <a href="admin-control.php" class="btn-green">← Retour à l’espace admin</a>
+    </section>
 </main>
 
 <script>
-// Récupération des données PHP -> JS
-const labels = <?php echo json_encode($labels); ?>;
-const ridesCount = <?php echo json_encode($ridesCount); ?>;
-const creditsCount = <?php echo json_encode($creditsCount); ?>;
+const labels = <?= json_encode($labels); ?>;
+const ridesCount = <?= json_encode($ridesCount); ?>;
+const creditsCount = <?= json_encode($creditsCount); ?>;
 
-// Premier graphique : trajets par jour
 new Chart(document.getElementById('ridesChart'), {
     type: 'line',
     data: {
@@ -85,7 +94,6 @@ new Chart(document.getElementById('ridesChart'), {
     }
 });
 
-// Deuxième graphique : crédits par jour
 new Chart(document.getElementById('creditsChart'), {
     type: 'bar',
     data: {
@@ -101,6 +109,5 @@ new Chart(document.getElementById('creditsChart'), {
 </script>
 
 <?php include('../includes/footer.php'); ?>
-
 </body>
 </html>

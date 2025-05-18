@@ -30,3 +30,4 @@ if (isset($_GET['id']) && isset($_GET['action'])) {
 // Retour à la liste admin
 header("Location: admin-control.php");
 exit;
+

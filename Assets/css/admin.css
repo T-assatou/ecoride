@@ -52,3 +52,25 @@ a.button:hover, button:hover {
   border: 1px solid #ccc;
   border-radius: 5px;
 }
+
+.admin-box {
+  border: 1px solid #ccc;
+  padding: 10px;
+  margin-bottom: 10px;
+}
+
+.suspend {
+  color: red;
+}
+
+.reactivate {
+  color: green;
+}
+
+.confirm-btn {
+  padding: 10px;
+  background: #4CAF50;
+  color: white;
+  text-decoration: none;
+  border-radius: 5px;
+}
