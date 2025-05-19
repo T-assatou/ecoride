@@ -1,5 +1,7 @@
 <?php
 // ============================
+// US12 - Validation avis
+
 // Fichier : pages/valider-avis.php
 // Rôle : Traite la validation ou le refus d'un avis par un employé
 // ============================
