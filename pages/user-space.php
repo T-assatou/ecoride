@@ -7,7 +7,7 @@
 require_once('../controllers/auth.php'); // Vérifie la connexion
 require_once('../models/db.php'); // Connexion BDD
 
-session_start();
+
 
 // Message temporaire (ex : annulation participation)
 $message = $_SESSION['message'] ?? null;
