@@ -1,5 +1,6 @@
 <?php
 // ============================
+// US 13
 // Fichier : pages/admin-control.php
 // Rôle : Interface de gestion administrateur
 // Permet de voir les trajets, participants, suspendre ou réactiver des utilisateurs
