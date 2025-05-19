@@ -1,5 +1,6 @@
 <?php
 // ============================
+// US 3- recherche de trajet
 // Fichier : pages/search.php
 // Rôle : Page publique pour chercher des covoiturages
 // ============================
