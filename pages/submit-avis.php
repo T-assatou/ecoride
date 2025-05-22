@@ -42,6 +42,3 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['chauffeur_id'], $_POS
     exit;
 }
 
-/*✅ Ce que tu peux dire à l’oral ou écrire dans ton rapport ECF
-
-“Ce fichier permet à un utilisateur connecté de laisser un avis sur un chauffeur après un trajet. L’avis est enregistré dans la base de données, mais il n’est pas affiché tant qu’il n’est pas validé par un employé. L’utilisateur reçoit un message de confirmation grâce à une variable $_SESSION.”*/

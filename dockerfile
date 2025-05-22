@@ -1,14 +1,11 @@
-# Dockerfile
-FROM php:8.2-apache
+# Utilise une image officielle PHP avec Apache
+FROM php:8.1-apache
 
-# Copie les fichiers dans le dossier /var/www/html
+# Active les extensions nécessaires (si tu utilises MySQL)
+RUN docker-php-ext-install mysqli pdo pdo_mysql
+
+# Copie tout le contenu dans le dossier web
 COPY . /var/www/html/
 
-# Active mod_rewrite pour Apache
+# Active le module rewrite d'Apache (utile pour certaines redirections)
 RUN a2enmod rewrite
-
-# Configure les droits (optionnel)
-RUN chown -R www-data:www-data /var/www/html
-
-# Expose le port
-EXPOSE 80

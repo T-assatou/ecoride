@@ -46,11 +46,11 @@ foreach ($participants as $p) {
         <p>Bonjour $pseudo,</p>
         <p>Le trajet auquel vous avez participé est maintenant terminé.</p>
         <p>👉 Connectez-vous à votre espace pour laisser un avis ou signaler un litige si nécessaire :</p>
-        <p><a href='https://ton-site.fly.dev/ecoride/pages/user-space.php'>Accéder à mon espace</a></p>
+        <p><a href='https://ton-site.fly.dev/pages/user-space.php'>Accéder à mon espace</a></p>
         <p>Merci d'avoir utilisé EcoRide !</p>
     ";
 
-    $messageTexte = "Bonjour $pseudo,\n\nLe trajet auquel vous avez participé est maintenant terminé.\nConnectez-vous à votre espace pour laisser un avis ou signaler un litige.\n\nhttps://ton-site.fly.dev/ecoride/pages/user-space.php";
+    $messageTexte = "Bonjour $pseudo,\n\nLe trajet auquel vous avez participé est maintenant terminé.\nConnectez-vous à votre espace pour laisser un avis ou signaler un litige.\n\nhttps://ton-site.fly.dev/pages/user-space.php";
 
     envoyerMail($email, $sujet, $messageHTML, $messageTexte);
 }

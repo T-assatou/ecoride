@@ -9,5 +9,5 @@
     <p>Contact : <a href="mailto:contact@ecoride.fr">contact@ecoride.fr</a></p>
 
     <!-- ML -->
-  <a href="/ecoride/mentions.php">Mentions légales</a>
+  <a href="/mentions.php">Mentions légales</a>
 </footer>
