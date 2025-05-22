@@ -43,7 +43,7 @@ if (isset($_GET['message']) && $_GET['message'] === 'compte_suspendu') {
             <button type="submit">Se connecter</button>
         </form>
 
-        <p>Pas encore inscrit ? <a href="register.php">Créer un compte</a></p>
+        <p>Pas encore inscrit ? <a href="register.php" class="link-white">Créer un compte</a></p>
     </section>
 </main>
 

@@ -1,0 +1,142 @@
+:***REMOVED*** {
+  --bleu-sombre: #1A282B;
+  --jaune-clair: #f1e8d2;
+  --bleu-moyen: #419ab5;
+  --jaune-vif: #e2b14e;
+  --vert-olive: #677138;
+  --orange-vif: #ef8406;
+  --orange-fonce: #bd6408;
+  --blanc :#fcf6f6; 
+
+}
+
+/* Global body */
+body {
+  background-color: var(--jaune-clair);
+  color: var(--bleu-sombre);
+  font-family: Arial, sans-serif;
+  padding: 20px;
+  text-align: center;
+ 
+  
+}
+
+/* Titres */
+h1, h2 {
+  color: var( --blanc);
+  margin-top: 30px;
+  background-color: var(--vert-olive);
+  padding: 20px;
+}
+
+/* Messages */
+p {
+  font-size: 1rem;
+  margin-bottom: 15px;
+}
+
+nav ul {
+  list-style: none;
+  display: flex;
+  justify-content: space-around;
+  flex-wrap: wrap;
+  padding: 0;
+  margin: 0;
+  color: #bd6408;
+  text-transform: uppercase;
+  font-weight: bold;
+}
+
+ul {
+  list-style: none;
+  text-align: center;
+  padding: 0;
+  margin: 0;
+}
+
+/* Formulaires centrés */
+.form-user-space {
+  background-color: white;
+  border-radius: 10px;
+  padding: 20px;
+  margin: 20px auto;
+  max-width: 500px;
+  box-shadow: 0 0 10px rgba(0,0,0,0.1);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.form-user-space input,
+.form-user-space select,
+.form-user-space textarea,
+.form-user-space button {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 10px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+}
+
+/* Boutons */
+.form-user-space button {
+  background-color: var(--vert-olive);
+  color: white;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+.form-user-space button:hover {
+  background-color: var(--bleu-sombre);
+}
+
+/* Cartes de covoiturage */
+.ride-box {
+  background-color: white;
+  border: 1px solid #ddd;
+  padding: 20px;
+  border-radius: 10px;
+  margin: 20px auto;
+  max-width: 600px;
+  text-align: left;
+  box-shadow: 0 0 5px #ccc;
+}
+
+.ride-box p {
+  margin: 10px 0;
+  font-size: 1rem;
+}
+
+.trajet-box {
+  border: 1px solid #ddd;
+  background-color: white;
+  border-radius: 8px;
+  padding: 10px 15px;
+  margin: 10px auto;
+  max-width: 600px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+}
+
+a:visited {
+  color: var(--orange-fonce);
+}
+a {
+  text-decoration: none;
+}
+
+
+/* FOOTER */
+footer {
+  text-align: center;
+  padding: 20px;
+  font-size: 0.9rem;
+  background-color: var(--vert-olive);
+  color: var(--jaune-clair);
+  margin-top: 50px;
+ 
+}
+
+footer a,
+footer a:visited {
+  color: var(--jaune-clair);
+}

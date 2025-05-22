@@ -27,6 +27,11 @@ But : Expliquer ce que fait chaque page visible côté utilisateur
 - Permet de rechercher un trajet selon ville de départ, d’arrivée et date.
 - Affiche les résultats avec bouton pour réserver.
 
+🔎 pages/détails.php
+
+Les préférences et la note du chauffeur sont actuellement simulées, mais j’ai prévu de les rendre dynamiques à l’aide de la base de données dans une prochaine itération.” ✅
+
+
 📥 pages/participate.php
 - Page appelée lorsqu’un utilisateur clique sur "Participer à ce trajet".
 - Insère l'utilisateur dans la table participants.

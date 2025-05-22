@@ -1,27 +1,26 @@
 <?php
 // ============================
 // Fichier : pages/search.php
-// Rôle : Rechercher des covoiturages avec filtres (US4)
+// Rôle : Rechercher des covoiturages avec filtres (US3 + US4)
 // ============================
 
-require_once('../models/db.php'); // Connexion à la BDD
+require_once('../models/db.php');
 $results = [];
+$suggestion = null;
 
-// Vérifie si le formulaire a été soumis
 if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['depart'], $_GET['arrivee'], $_GET['date'])) {
     $depart = $_GET['depart'];
     $arrivee = $_GET['arrivee'];
     $date = $_GET['date'];
 
-    // Filtres optionnels
     $prix_max = $_GET['prix_max'] ?? null;
     $duree_max = $_GET['duree_max'] ?? null;
     $note_min = $_GET['note_min'] ?? null;
-    $electrique = isset($_GET['electrique']); // true si coché
+    $electrique = isset($_GET['electrique']);
 
-    // Construction de la requête SQL
-    $sql = "SELECT rides.*, vehicles.marque, vehicles.modele, vehicles.energie, users.pseudo,
-                   IFNULL(AVG(avis.note), 0) AS note_moyenne
+    $sql = "SELECT rides.id, rides.depart, rides.arrivee, rides.date_depart, rides.prix, rides.places, 
+                   rides.duree, vehicles.marque, vehicles.modele, vehicles.energie, 
+                   users.pseudo, IFNULL(AVG(avis.note), 0) AS note_moyenne
             FROM rides
             INNER JOIN vehicles ON rides.vehicle_id = vehicles.id
             INNER JOIN users ON rides.user_id = users.id
@@ -31,46 +30,40 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['depart'], $_GET['arrive
               AND DATE(rides.date_depart) = :date
               AND rides.places > 0";
 
-    // Ajout des filtres optionnels
-    if (!empty($prix_max)) {
-        $sql .= " AND rides.prix <= :prix_max";
-    }
-
-    if (!empty($duree_max)) {
-        $sql .= " AND rides.duree <= :duree_max";
-    }
-
-    if (!empty($note_min)) {
-        $sql .= " HAVING note_moyenne >= :note_min";
-    }
-
-    if ($electrique) {
-        $sql .= (strpos($sql, 'HAVING') === false) ? " HAVING" : " AND";
-        $sql .= " vehicles.energie = 'electrique'";
-    }
+    if (!empty($prix_max)) $sql .= " AND rides.prix <= :prix_max";
+    if (!empty($duree_max)) $sql .= " AND rides.duree <= :duree_max";
+    if (!empty($note_min)) $sql .= " HAVING note_moyenne >= :note_min";
+    if ($electrique) $sql .= (strpos($sql, 'HAVING') === false ? " HAVING" : " AND") . " vehicles.energie = 'électrique'";
 
     $sql .= " GROUP BY rides.id ORDER BY rides.date_depart";
 
-    // Préparation de la requête
     $stmt = $pdo->prepare($sql);
-
-    // Liaison des paramètres
     $stmt->bindValue(':depart', $depart);
     $stmt->bindValue(':arrivee', $arrivee);
     $stmt->bindValue(':date', $date);
-    if (!empty($prix_max)) {
-        $stmt->bindValue(':prix_max', $prix_max);
-    }
-    if (!empty($duree_max)) {
-        $stmt->bindValue(':duree_max', $duree_max);
-    }
-    if (!empty($note_min)) {
-        $stmt->bindValue(':note_min', $note_min);
-    }
+    if (!empty($prix_max)) $stmt->bindValue(':prix_max', $prix_max);
+    if (!empty($duree_max)) $stmt->bindValue(':duree_max', $duree_max);
+    if (!empty($note_min)) $stmt->bindValue(':note_min', $note_min);
 
-    // Exécution
     $stmt->execute();
     $results = $stmt->fetchAll();
+
+    // Suggestion si aucun résultat
+    if (empty($results)) {
+        $sql_alt = "SELECT rides.*, users.pseudo, vehicles.marque, vehicles.modele, vehicles.energie,
+                       IFNULL(AVG(avis.note), 0) AS note_moyenne
+                    FROM rides
+                    INNER JOIN users ON rides.user_id = users.id
+                    INNER JOIN vehicles ON rides.vehicle_id = vehicles.id
+                    LEFT JOIN avis ON avis.chauffeur_id = users.id
+                    WHERE rides.depart = :depart AND rides.arrivee = :arrivee
+                      AND rides.places > 0 AND rides.date_depart > :date
+                    GROUP BY rides.id
+                    ORDER BY rides.date_depart ASC LIMIT 1";
+        $stmt_alt = $pdo->prepare($sql_alt);
+        $stmt_alt->execute([':depart' => $depart, ':arrivee' => $arrivee, ':date' => $date]);
+        $suggestion = $stmt_alt->fetch();
+    }
 }
 ?>
 
@@ -80,9 +73,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['depart'], $_GET['arrive
     <meta charset="UTF-8">
     <title>Rechercher un covoiturage - EcoRide</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="../assets/css/style.css">
+    <link rel="stylesheet" href="../Assets/css/style.css">
 </head>
 <body>
+
 <?php include('../includes/nav.php'); ?>
 
 <header>
@@ -90,8 +84,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['depart'], $_GET['arrive
 </header>
 
 <main>
-<section>
-    <form action="search.php" method="get" class="form-section">
+<section class="form-section">
+    <form action="search.php" method="get">
         <label for="depart">Ville de départ :</label>
         <input type="text" name="depart" id="depart" required>
 
@@ -101,7 +95,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['depart'], $_GET['arrive
         <label for="date">Date de départ :</label>
         <input type="date" name="date" id="date" required>
 
-        <!-- Filtres supplémentaires (US4) -->
+        <!-- Filtres supplémentaires -->
         <label for="prix_max">Prix maximum (€) :</label>
         <input type="number" name="prix_max" id="prix_max" min="0" step="1">
 
@@ -125,15 +119,30 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['depart'], $_GET['arrive
     <?php if (!empty($results)): ?>
         <?php foreach ($results as $ride): ?>
             <div class="ride-box">
+                <img src="https://randomuser.me/api/portraits/men/75.jpg" alt="Photo conducteur" width="100">
                 <p><strong>Départ :</strong> <?= htmlspecialchars($ride['depart']) ?> → <strong>Arrivée :</strong> <?= htmlspecialchars($ride['arrivee']) ?></p>
-                <p><strong>Date :</strong> <?= htmlspecialchars($ride['date_depart']) ?> - <strong>Durée :</strong> <?= htmlspecialchars($ride['duree']) ?> min</p>
+                <p><strong>Date :</strong> <?= htmlspecialchars($ride['date_depart']) ?></p>
+
+                <?php
+                    $heure_depart = new DateTime($ride['date_depart']);
+                    $heure_arrivee = clone $heure_depart;
+                    $heure_arrivee->modify("+{$ride['duree']} minutes");
+                ?>
+                <p><strong>Heure de départ :</strong> <?= $heure_depart->format('H:i') ?> - <strong>Heure d’arrivée :</strong> <?= $heure_arrivee->format('H:i') ?></p>
+
+                <p><strong>Durée :</strong> <?= htmlspecialchars($ride['duree']) ?> min</p>
                 <p><strong>Prix :</strong> <?= htmlspecialchars($ride['prix']) ?> €</p>
-                <p><strong>Conducteur :</strong> <?= htmlspecialchars($ride['pseudo']) ?> - Note : <?= round($ride['note_moyenne'], 1) ?>/5</p>
+                <p><strong>Conducteur :</strong> <?= htmlspecialchars($ride['pseudo']) ?> - Note :
+                    <?= $ride['note_moyenne'] > 0 ? round($ride['note_moyenne'], 1) . '/5' : '⭐ Pas encore noté' ?>
+                </p>
                 <p><strong>Véhicule :</strong> <?= htmlspecialchars($ride['marque']) ?> <?= htmlspecialchars($ride['modele']) ?> (<?= htmlspecialchars($ride['energie']) ?>)</p>
+                <p><strong>Type de trajet :</strong> <?= $ride['energie'] === 'électrique' ? '✅ Écologique' : '❌ Non écologique' ?></p>
                 <p><strong>Places disponibles :</strong> <?= htmlspecialchars($ride['places']) ?></p>
                 <a href="details.php?ride_id=<?= $ride['id'] ?>" class="btn-blue">Voir les détails</a>
             </div>
         <?php endforeach; ?>
+    <?php elseif (!empty($suggestion)): ?>
+        <p>Aucun covoiturage trouvé à cette date. Essayez à la date suivante : <strong><?= htmlspecialchars($suggestion['date_depart']) ?></strong></p>
     <?php else: ?>
         <p>Aucun résultat trouvé. Essayez de modifier les filtres.</p>
     <?php endif; ?>

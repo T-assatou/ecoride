@@ -1,15 +1,14 @@
 :***REMOVED*** {
-  --vert-eau: #BCE3C3;
-  --jaune-paille: #FFF8D2;
-  --olive-pastel: #D7E7A9;
-  --bleu-pastel: #C9E3ED;
-  --terre-rose: #EAD5C0;
-  --gris-pastel: #F0F0F0;
-  --texte-sombre: #2C2C2C;
-  --accent: #6B9080;
-  --ocre-signal: #C26A33;
-  --orange-doux: #f6af4c;
-  --bleu-clair: #106C97;
+  --bleu-sombre: #1A282B;
+  --jaune-clair: #f1e8d2;
+  --bleu-moyen: #419ab5;
+  --jaune-vif: #e2b14e;
+  --vert-olive: #677138;
+  --vert: #07c934;
+  --orange-vif: #ef8406;
+  --orange-fonce: #bd6408;
+  --blanc :#fcf6f6; 
+  
 }
 
 /* RESET */
@@ -22,34 +21,39 @@
 /* BODY */
 body {
   font-family: Arial, sans-serif;
-  background-color: var(--jaune-paille);
-  color: var(--texte-sombre);
+  background-color: var(--jaune-clair);
+  color: var(--bleu-sombre);
   line-height: 1.6;
   padding: 20px;
+  
 }
 
 /* HEADER */
 header {
   text-align: center;
-  background-color: var(--olive-pastel);
+  background-color: var(--vert-olive);
   color: var(--texte-sombre);
   padding: 30px 10px;
+  margin-bottom: 20px;
   border-bottom: 2px solid var(--olive-pastel);
 }
 
 /* NAVIGATION */
-nav {
- /* background-color: var(--olive-pastel);*/
-  padding: 15px;
-}
+
 nav ul {
   list-style: none;
   display: flex;
   justify-content: space-around;
   flex-wrap: wrap;
+  padding: 0;
+  margin: 0;
+  color: #bd6408;
+  text-transform: uppercase;
+  font-weight: bold;
 }
+
 nav li a {
-  color: var( --bleu-clair);
+  color: var(--orange-fonce);
   text-decoration: none;
   font-weight: bold;
 }
@@ -57,12 +61,20 @@ nav li a:hover {
   color: var(--ocre-signal);
 }
 
+ul {
+  list-style: none;
+  text-align: center;
+  padding: 0;
+  margin: 0;
+}
+
+
 /* SECTION */
 section {
   margin: 30px auto;
   max-width: 700px;
   text-align: center;
-  background-color: white;
+  background-color:var(--orange-vif);
   padding: 20px;
   border-radius: 10px;
   box-shadow: 0 0 5px #ccc;
@@ -75,8 +87,8 @@ section img {
 
 /* FORMULAIRE DE RECHERCHE */
 .search-bar {
-  background-color: var(--bleu-pastel);
-  color: var(--texte-sombre);
+  background-color: var(--orange-fonce);
+  color: var(--bleu-sombre);
   padding: 20px;
   border-radius: 10px;
   margin-top: 30px;
@@ -85,21 +97,23 @@ section img {
   display: flex;
   flex-direction: column;
   gap: 10px;
+
 }
 .search-bar input,
 .search-bar button {
+  
   padding: 10px;
   font-size: 1rem;
 }
 .search-bar button {
-  background-color: var(--accent);
+  background-color: var(--vert-olive);
   color: white;
   border: none;
   cursor: pointer;
   transition: background 0.3s ease;
 }
 .search-bar button:hover {
-  background-color: #50766e;
+  background-color: var(--vert-olive);
 }
 
 
@@ -125,12 +139,23 @@ footer {
   text-align: center;
   padding: 20px;
   font-size: 0.9rem;
-  background-color: var(--vert-eau);
-  color: var(--texte-sombre);
+  background-color: var(--vert-olive);
+  color: var(--jaune-clair);
   margin-top: 50px;
-  border-top: 1px solid var(--olive-pastel);
+ 
 }
 
+footer a,
+footer a:visited {
+  color: var(--jaune-clair);
+}
+
+a:visited {
+  color: var(--orange-fonce);
+}
+a {
+  text-decoration: none;
+}
 /* MESSAGES */
 .alert {
   background-color: #ffe5e5;
@@ -158,18 +183,20 @@ footer {
 .admin-button {
   display: inline-block;
   padding: 8px 12px;
-  color: white;
+  color: wheat;
   text-decoration: none;
   border-radius: 5px;
 }
 .btn-green {
-  background-color: var(--accent);
+  background-color: var(--vert);
+  color: #ffffff;
 }
 .btn-blue {
-  background-color: #74a8bd;
+  background-color: var(--bleu-moyen);
+  
 }
 .admin-button {
-  background-color: var(--accent);
+  background-color: var(--blanc);
   margin: 5px 0;
 }
 .admin-button.green {
@@ -221,7 +248,7 @@ footer {
   margin: 30px auto;
   max-width: 800px;
   padding: 20px;
-  border-bottom: 1px solid var(--gris-pastel);
+  border-bottom: 1px solid var(--vert-olive);
 }
 
 /* TEXTE COLORÉ */
@@ -230,4 +257,43 @@ footer {
 }
 .confirm-action.green {
   color: green;
+}
+
+.link-white,
+.link-white:visited {
+  color: white;
+  text-decoration: underline;
+}
+
+.btn-blue,.btn-blue:visited { color: white;
+  text-decoration: underline;
+}
+
+.text-center {
+    text-align: center;
+}
+
+.italic {
+    font-style: italic;
+}
+
+.dashboard-container {
+    max-width: 900px;
+    margin: auto;
+    padding: 20px;
+}
+
+.credits-total-box {
+    background: #eafbe7;
+    padding: 15px;
+    text-align: center;
+    border-radius: 10px;
+    margin: 20px auto;
+    max-width: 400px;
+}
+
+.credits-total-number {
+    font-size: 1.4rem;
+    color: rgb(0, 0, 0);
+    font-weight: bold;
 }

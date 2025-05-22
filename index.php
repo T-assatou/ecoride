@@ -5,12 +5,12 @@
     <meta charset="UTF-8"> <!-- Autorise les accents et caractères spéciaux -->
     <title>EcoRide - Accueil</title> <!-- Titre de l'onglet du navigateur -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0"> <!-- Responsive pour mobile -->
-    <link rel="stylesheet" href="assets/css/style.css"> <!-- Lien vers la feuille de style CSS -->
-    <link rel="stylesheet" href="assets/css/admin.css">
+    <link rel="stylesheet" href="Assets/css/style.css"> <!-- Lien vers la feuille de style CSS -->
+   
 </head>
 <body>
 
-<!-- Inclut le menu de navigation (fichier séparé) -->
+<!-- menu de navigation (fichier séparé) -->
 <?php include('includes/nav.php'); ?>
 
 <!-- En-tête principal du site -->
@@ -27,8 +27,8 @@
             Réduire l'empreinte carbone de vos déplacements
             en encourageant le covoiturage responsable.
         </p>
-        <!-- Image illustrative -->
-        <img src="https://images.unsplash.com/photo-1530639836705-324a0fd6ef38?auto=format&fit=crop&w=1000&q=80" alt="Voiture écologique" width="300">
+        <!-- Image -->
+        <img src="Assets/img/home.jpg" alt="Voiture écologique" width="300">
     </section>
 
     <!-- Formulaire de recherche d'itinéraires -->
@@ -52,7 +52,7 @@
     </section>
 </main>
 
-<!-- Inclut le pied de page (fichier séparé) -->
+<!-- pied de page (fichier séparé) -->
 <?php include('includes/footer.php'); ?>
 
 </body>

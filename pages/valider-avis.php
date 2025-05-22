@@ -40,7 +40,3 @@ header("Location: employe-space.php");
 exit;
 
 
-/*Ce fichier permet à l’employé de traiter les avis envoyés par les utilisateurs.
-Si l’avis est validé, il est mis à jour avec un champ valide = 1.
-Si l’avis est refusé, il est supprimé de la base.
-L’action est sécurisée, limitée au rôle employe, et redirige automatiquement vers la bonne page.”*/

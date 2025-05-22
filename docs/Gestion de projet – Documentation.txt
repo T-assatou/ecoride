@@ -1,0 +1,49 @@
+ Gestion de projet – Documentation
+
+
+ 1.  Découpage en étapes
+
+J’ai divisé le travail en plusieurs étapes, en suivant les User Stories fournies dans le sujet ECF :
+	•	Page d’accueil
+	•	Inscription / connexion
+	•	Création de trajets
+	•	Réservation
+	•	Avis, litiges, etc.
+
+Chaque fonctionnalité a été développée une par une, avec des tests à chaque fois.
+
+⸻
+
+2. Outil utilisé
+
+J’ai utilisé Trello pour organiser les tâches du projet.
+
+Chaque carte représentait une fonctionnalité à faire (ex. : “Créer un trajet”, “S’inscrire”) et passait dans plusieurs colonnes :
+	•	À faire
+	•	En cours
+	•	Fait
+
+Cela m’a aidé à voir l’avancement, à me concentrer sur une tâche à la fois et à ne rien oublier.
+
+⸻
+
+3. Méthode utilisée
+
+J’ai utilisé une méthode simple :
+	•	Lire la consigne de l’ECF
+	•	Créer la structure (HTML/CSS)
+	•	Ajouter le code PHP
+	•	Tester avec la base de données
+	•	Corriger les erreurs
+	•	Passer à la tâche suivante
+
+⸻
+
+4.  Gestion du code
+
+J’ai utilisé Git et GitHub :
+	•	Création de branches pour chaque fonctionnalité
+	•	Sauvegarde régulière
+	•	Commit clair (ex. : “Ajout de l’inscription utilisateur”)
+
+Cela m’a permis de garder une trace de mon travail.

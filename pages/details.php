@@ -8,7 +8,7 @@ require_once('../models/db.php');
 session_start();
 
 // Vérifie que l'ID du trajet est fourni
-$trajet_id = $_GET['id'] ?? null;
+$trajet_id = $_GET['ride_id'] ?? null;
 if (!$trajet_id) {
     echo "Aucun identifiant de trajet fourni.";
     exit;
@@ -72,9 +72,9 @@ $avis = $avis_stmt->fetchAll();
     <!-- Préférences du conducteur (simulées pour débutant) -->
     <h3>Préférences du conducteur :</h3>
     <ul>
-        <li>❌ Fumeur non autorisé</li>
-        <li>✅ Animaux autorisés</li>
-        <li>📦 Pas de gros bagages</li>
+        <li> Fumeur non autorisé</li>
+        <li>Animaux autorisés</li>
+        <li>Pas de gros bagages</li>
     </ul>
 
     <!-- Avis du conducteur -->
@@ -96,7 +96,7 @@ $avis = $avis_stmt->fetchAll();
     <?php elseif (!isset($_SESSION['user_id'])): ?>
         <p><a href="login.php" class="btn-blue">🔐 Connectez-vous pour participer</a></p>
     <?php else: ?>
-        <p>🚫 Ce trajet est complet.</p>
+        <p> Ce trajet est complet.</p>
     <?php endif; ?>
 </section>
 </main>

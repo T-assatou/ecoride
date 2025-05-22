@@ -71,6 +71,7 @@ CREATE TABLE litiges (
 CREATE TABLE avis (
     id INT AUTO_INCREMENT PRIMARY KEY,
     contenu TEXT NOT NULL,
+    note DECIMAL(2,1) DEFAULT 0,
     chauffeur_id INT NOT NULL,
     auteur_id INT NOT NULL,
     valide TINYINT(1) DEFAULT 0,
@@ -83,9 +84,9 @@ CREATE TABLE avis (
 INSERT INTO `users` (`id`, `pseudo`, `email`, `password`, `credits`, `role`, `created_at`, `actif`) VALUES
 (5, 'TestUser', 'test@ecoride.fr', '$2y$10$JWgRCA/6Q8paJEQEjKCXxeACVUjG0xROt1OZt4/mfZO7rVoW6kOtW', 20, 'les deux', '2025-04-28 10:12:05', 1),
 (12, 'manu', 'manu@ecoride.fr', '$2y$10$xf4OHESvGtepa84kvk/Nc.QfjFKjcmwGwggx2FTkOO1PM55.ImqZ.', 0, 'employe', '2025-04-29 14:25:39', 0),
-(16, 'TestUser', 'test2@ecoride.fr', '$2y$10$g5vSm29rb7YlS7YlYXL.Wuk3GZCPN6a6QzPknTFjq6x2jKZHAXFQa', 20, 'utilisateur', '2025-05-03 18:36:02', 1),
+
 (17, 'Admin', 'admin2@ecoride.fr', '$2y$10$6wHFj3d5rIvcghpvw/Fw.OBEHnvIipFZBWWAGSBlP3GFodkabLg2G', 999, 'admin', '2025-05-03 18:36:02', 1),
-(19, 'testeur3', 'test3@ecoride.fr', '$2y$10$Ey/X7mewu1bvAyPkuYLUsekSb8wV2YrRxhl8rCsbrxeHn30zdLI.u', 20, 'chauffeur', '2025-05-05 17:46:41', 1),
+
 (21, 'Employe', 'employe@ecoride.fr', '$2y$10$looA7LvVMzQtDS5Y//iBYOFzDFebzMgH46gy.OMXVGTyV9BuUu/e.', 0, 'employe', '2025-05-06 15:58:58', 1);
 
 -- Données de la table vehicles
