@@ -1,0 +1,242 @@
+1. Réflexion technologique initiale
+
+J’ai utilisé des technologies simples, demandées dans l’ECF et accessibles à un débutant :
+	•	HTML / CSS : création des pages visibles.
+	•	JavaScript : interactions simples (ex. : messages de confirmation).
+	•	PHP : traitement des formulaires, gestion des rôles, insertion dans la base…
+	•	MySQL : base de données relationnelle pour stocker les utilisateurs, trajets, etc.
+	•	MAMP : serveur local pour tester le site sur mon ordinateur.
+⸻
+
+
+
+2. Configuration de l’environnement de travail
+
+🖥️ Matériel utilisé
+	•	Un MacBook avec le système macOS.
+	•	J’ai utilisé Visual Studio Code (VS Code) pour écrire le code.
+	•	J’ai utilisé le Terminal pour certaines commandes Git.
+
+🔧 Outils installés
+	•	MAMP : c’est un logiciel qui installe un serveur local avec Apache, PHP et MySQL.
+	•	J’accède au site ici : http://localhost:8888/ecoride/
+	•	J’accède à la base de données ici : http://localhost/phpMyAdmin
+	•	Git : pour gérer les versions de mon projet.
+	•	GitHub : pour sauvegarder le projet en ligne et le partager.
+	•	Mon dépôt est ici : https://github.com/T-assatou/ecoride.git
+	•	Navigateur utilisé : Google Chrome pour tester le site.
+
+▶️ Comment j’ai lancé le projet en local
+	1.	J’ouvre MAMP et je clique sur “Start” pour démarrer Apache et MySQL.
+	2.	Je place mon dossier ecoride/ dans : /Applications/MAMP/htdocs/
+	3.	Je vais sur cette adresse pour voir le site : http://localhost:8888/ecoride/index.php
+	4.	J’ouvre phpMyAdmin, et j’importe le fichier ecoride.sql pour créer la base de données avec les données de test.
+
+🗂️ Structure du dossier du projet
+
+ecoride/
+├── assets/         → fichiers CSS, images, JavaScript
+├── controllers/    → fichiers pour les actions serveur (connexion, ajout trajet…)
+├── includes/       → éléments communs (menu, pied de page)
+├── models/         → fichier pour se connecter à la base de données
+├── pages/          → les vraies pages du site (accueil, recherche, espace utilisateur…)
+├── README.md       → explication du projet
+└── ecoride.sql     → fichier qui crée la base de données et ajoute des exemples
+
+
+⸻
+
+3. Modèle Conceptuel de Données (MCD)
+
+Le MCD (Modèle Conceptuel de Données) sert à montrer quelles sont les données importantes du projet, et comment elles sont liées entre elles.
+
+📦 Dans EcoRide, les principales données sont :
+	•	Les utilisateurs (passagers, chauffeurs, employés, administrateurs)
+	•	Les véhicules ajoutés par les chauffeurs
+	•	Les trajets proposés par les chauffeurs
+	•	Les participants à un trajet (réservations)
+	•	Les avis (laissés par les passagers)
+	•	Les litiges (problèmes signalés)
+
+⸻
+
+🔗 Relations entre les données  :
+	•	Un utilisateur peut avoir plusieurs véhicules.
+	•	Un utilisateur peut créer plusieurs trajets (s’il est chauffeur).
+	•	Un utilisateur peut réserver plusieurs trajets (s’il est passager).
+	•	Un véhicule appartient à un seul utilisateur.
+	•	Un trajet est lié à un seul véhicule et un seul chauffeur.
+	•	Un trajet peut être réservé par plusieurs passagers.
+	•	Un utilisateur peut laisser plusieurs avis sur des chauffeurs.
+	•	Un utilisateur peut signaler plusieurs litiges.
+	•	Un litige concerne :
+	•	un trajet,
+	•	un passager (qui signale le problème),
+	•	un chauffeur (concerné par le problème).
+
+⸻
+
+🗂️ Schéma simplifié en texte (ASCII)
+
+UTILISATEUR
+ ├── id
+ ├── pseudo
+ ├── email
+ └── ...
+
+UTILISATEUR ──► VÉHICULE  
+(Un utilisateur possède plusieurs véhicules)
+
+UTILISATEUR ──► TRAJET  
+(Un utilisateur peut créer plusieurs trajets)
+
+UTILISATEUR ──► PARTICIPANT ◄── TRAJET  
+(Un utilisateur peut réserver plusieurs trajets,  
+et un trajet peut être réservé par plusieurs utilisateurs)
+
+UTILISATEUR ──► AVIS  
+(Un utilisateur peut laisser plusieurs avis)
+
+AVIS ──► UTILISATEUR  
+(Chaque avis est destiné à un chauffeur)
+
+UTILISATEUR ──► LITIGE  
+(Un utilisateur peut signaler plusieurs litiges)
+
+LITIGE ──► TRAJET  
+(Chaque litige concerne un trajet)
+
+LITIGE ──► UTILISATEUR (chauffeur concerné)  
+LITIGE ──► UTILISATEUR (passager auteur)
+
+4. Diagrammes d’utilisation et de séquence
+
+🧩 A. Diagramme d’utilisation (rôle de chaque utilisateur)
+
+Ce diagramme montre ce que chaque type d’utilisateur peut faire dans l’application EcoRide.
+
+➤ Utilisateur (connecté)
+	•	S’inscrire
+	•	Se connecter
+	•	Changer de rôle (passager, chauffeur, les deux)
+	•	Réserver un trajet
+	•	Laisser un avis
+	•	Signaler un litige
+
+➤ Chauffeur
+	•	Ajouter un véhicule
+	•	Créer un trajet
+	•	Démarrer un trajet
+	•	Terminer un trajet
+
+➤ Employé
+	•	Valider les avis
+	•	Consulter les litiges
+
+➤ Administrateur
+	•	Gérer les trajets
+	•	Gérer les utilisateurs (suspendre/réactiver)
+	•	Créer des comptes employés
+
+⸻
+
+🧩 B. Diagramme de séquence (exemple : réservation d’un trajet)
+
+Ce diagramme montre les étapes techniques quand un utilisateur réserve un trajet.
+
+Scénario : un passager cherche un trajet et réserve
+
+Utilisateur       →  Interface (search.php)          : Lance une recherche
+Interface         →  Base de données (SQL)           : Cherche les trajets disponibles
+Base de données   →  Interface                        : Affiche les résultats
+
+Utilisateur       →  Interface                        : Clique sur "Participer"
+Interface         →  participate.php                  : Affiche page de confirmation
+
+participate.php   →  BDD                              : Vérifie si le trajet existe
+participate.php   →  BDD                              : Vérifie s’il reste des places
+participate.php   →  BDD                              : Vérifie les crédits de l’utilisateur
+
+[Si tout est bon]
+→ participate.php → BDD                              : Enregistre la réservation
+→ participate.php → BDD                              : Enlève 1 place au trajet
+→ participate.php → BDD                              : Retire les crédits du passager
+
+participate.php   →  Utilisateur                      : Affiche "Réservation validée "
+
+⸻
+
+Documentation du déploiement de l’application EcoRide
+
+Le déploiement final est effectué sur la plateforme Fly.io, recommandée dans le sujet de l’ECF.
+
+	1.	Préparation du projet
+	•	Vérification que tous les fichiers sont bien organisés dans une structure claire :
+
+  ecoride/
+├── pages/
+├── controllers/
+├── models/
+├── assets/
+├── vendor/PHPMailer/
+├── includes/
+└── index.php
+
+	2.	Test en local avec MAMP
+
+  •	Simulation complète du site en local sur http://localhost:8888/ecoride/.
+	•	Tests de :
+	•	Connexion / inscription
+	•	Réservation de trajets
+	•	Avis et litiges
+	•	Envoi d’e-mail avec Mailjet (testé via PHPMailer)
+
+	3.	Création d’un compte Fly.io
+
+
+	•	Inscription gratuite sur https://fly.io.
+	•	Installation de Fly CLI avec la commande :
+  curl -L https://fly.io/install.sh | sh
+
+  	•	Connexion à mon compte :
+
+  fly auth login
+
+  	4.	Création de l’application sur Fly.io
+
+    •	Initialisation avec :
+
+    fly launch
+
+	•	Configuration automatique du nom, région et port 8080.
+
+  	5.	Ajout de la base de données
+
+	•	Export du fichier ecoride.sql.
+	•	Création manuelle de la base via un service tiers ou hébergement MySQL distant.
+	•	Modification du fichier models/db.php pour pointer vers la base de données distante :
+
+  $pdo = new PDO('mysql:host=nom_du_serveur;dbname=ecoride', 'utilisateur', 'motdepasse');
+
+
+  	6.	Déploiement final
+	•	Lancement du déploiement :
+
+  fly deploy
+
+
+•	Attente de la publication automatique.
+
+	7.	Vérification
+	•	Ouverture de l’URL donnée par Fly.io :
+
+  https://ecoride.fly.dev/
+
+  	•	Vérification que tout fonctionne bien : formulaires, base de données, redirections.
+
+    Résultat
+
+L’application EcoRide est entièrement fonctionnelle et accessible en ligne. Tous les rôles sont utilisables (passager, chauffeur, employé, admin).
+Les fichiers nécessaires au projet (SQL, code, documentation) sont bien présents dans le GitHub public.
+
+

@@ -35,7 +35,7 @@ ecoride/
 ## 👤 Identifiants de test
 | Rôle        | Email                  | Mot de passe |
 |-------------|------------------------|--------------|
-| Admin       | admin2@ecoride.fr      | admin123     |
+| Admin       | admin@ecoride.fr       | admin123     |
 | Employé     | employe@ecoride.fr     | employe123   |
 | Utilisateur | test@ecoride.fr        | 123456       |
 
@@ -110,6 +110,20 @@ ecoride/
 
 ---
 
+## Limitations connues
+
+- Les utilisateurs reçoivent 20 crédits lors de la création du compte.
+- Dans cette version de démonstration, les crédits sont initiaux et limités. 
+  Un système de recharge ou de récompense pourra être implémenté ultérieurement.
+
+- Les préférences et la note du chauffeur sont actuellement simulées, mais j’ai prévu de les rendre dynamiques à l’aide de la base de données.
+
+- Tentative d’envoi d’e-mails (fonctionnalité SMTP)
+
+Une tentative d’intégration du système d’envoi d’e-mails via PHPMailer et Mailjet a été réalisée dans le fichier controllers/mail.php, avec appel depuis end_ride.php afin de notifier les passagers par email une fois un trajet terminé.
+Malgré la configuration correcte (clé API, port SMTP, expéditeur valide), l’envoi ne fonctionne pas en local via MAMP, probablement pour des raisons de blocage SMTP sortant, de pare-feu, ou de vérification d’identité du domaine (adresse d’expéditeur non approuvée).
+Faute de temps, cela n’a pas pu être corrigé avant la date limite de l’ECF, mais le code est en place et pourra fonctionner correctement après déploiement sur un serveur réel (ex : Fly.io) et validation du domaine d’envoi.
+---
 ## 👨‍💻 Auteur
 Projet réalisé par **T-assatou** dans le cadre du TP DWWM - Studi.  
 Merci à toute l'équipe pédagogique !

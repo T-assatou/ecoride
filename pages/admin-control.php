@@ -47,7 +47,7 @@ $users = $stmt->fetchAll();
 
 <main>
     <section class="admin-section">
-        <h2>🚘 Tous les covoiturages</h2>
+        <h2>Tous les covoiturages</h2>
 
         <?php foreach ($rides as $ride): ?>
             <div class="ride-card">
@@ -101,8 +101,8 @@ $users = $stmt->fetchAll();
     </section>
 
     <section class="admin-section">
-        <a href="create-employee.php" class="admin-button">➕ Créer un employé</a>
-        <a href="dashboard.php" class="admin-button">📊 Voir le Dashboard</a>
+        <a href="create-employee.php" class="admin-button"> Créer un employé</a>
+        <a href="dashboard.php" class="admin-button"> Voir le Dashboard</a>
     </section>
 </main>
 

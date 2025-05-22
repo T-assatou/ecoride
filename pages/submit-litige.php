@@ -46,6 +46,3 @@ if (
     exit;
 }
 
-/*Ce que tu peux dire au jury :
-
-“Ce fichier permet à un utilisateur connecté de signaler un litige lié à un trajet. Les informations sont enregistrées dans une table litiges, avec les identifiants du passager, du chauffeur, du trajet concerné, et le commentaire. Une fois enregistré, un message de confirmation s’affiche. Ce litige sera ensuite visible dans l’espace employé.”*/

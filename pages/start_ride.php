@@ -2,7 +2,7 @@
 require_once('../models/db.php');
 session_start();
 
-$ride_id = $_GET['ride_id'] ?? null;
+$ride_id = $_POST['ride_id'] ?? $_GET['ride_id'] ?? null;
 $user_id = $_SESSION['user_id'];
 
 if (!$ride_id) exit("❌ Trajet non spécifié.");

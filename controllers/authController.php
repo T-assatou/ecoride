@@ -68,22 +68,22 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                 } else {
                     // ⚠️ Compte désactivé
-                    echo "🚫 Votre compte est suspendu. Veuillez contacter un administrateur.";
+                    echo "Votre compte est suspendu. Veuillez contacter un administrateur.";
                 }
 
             } else {
                 // ❌ Mauvais mot de passe
-                echo "❌ Mot de passe incorrect.";
+                echo " Mot de passe incorrect.";
             }
 
         } else {
             // ❌ Email introuvable
-            echo "❌ Email inconnu.";
+            echo "Email inconnu.";
         }
 
     } else {
         // ⚠️ Champs manquants
-        echo "⚠️ Veuillez remplir tous les champs.";
+        echo "Veuillez remplir tous les champs.";
     }
 }
 ?>

@@ -1,12 +1,4 @@
 <?php
-// ============================
-
-//US13
-// Fichier : pages/dashboard.php
-// Rôle : Tableau de bord admin avec graphiques statistiques
-// ============================
-
-
 require_once('../models/db.php');
 session_start();
 
@@ -31,7 +23,6 @@ foreach ($creditsData as $row) {
     $creditsCount[] = $row['credits'];
 }
 ?>
-
 <!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -41,38 +32,33 @@ foreach ($creditsData as $row) {
     <link rel="stylesheet" href="../Assets/css/style.css">
 </head>
 <body>
-
 <?php include('../includes/nav.php'); ?>
 
 <header>
     <h1>Dashboard Administrateur</h1>
 </header>
 
-<p style="text-align:center; font-style:italic;">
-    Analyse quotidienne de l’activité EcoRide
-</p>
+<p class="text-center italic">Analyse quotidienne de l’activité EcoRide</p>
 
-<main>
+<main class="dashboard-container">
     <section>
-        <h2>📈 Nombre de covoiturages par jour</h2>
+        <h2> Nombre de covoiturages par jour</h2>
         <canvas id="ridesChart"></canvas>
     </section>
 
     <hr>
 
     <section>
-        <h2>💰 Crédits gagnés par jour</h2>
+        <h2> Crédits gagnés par jour</h2>
         <canvas id="creditsChart"></canvas>
 
-        <div style="margin: 20px auto; background: #eafbe7; padding: 15px; text-align: center; max-width: 400px; border-radius: 10px;">
-            <strong>💼 Total des crédits gagnés par la plateforme :</strong><br>
-            <span style="font-size: 1.4rem; color: green; font-weight: bold;">
-                <?= $totalCredits ?> crédits
-            </span>
+        <div class="credits-total-box">
+            <strong> Total des crédits gagnés par la plateforme :</strong><br>
+            <span class="credits-total-number"><?= $totalCredits ?> crédits</span>
         </div>
     </section>
 
-    <section style="text-align:center; margin-top: 30px;">
+    <section class="text-center">
         <a href="admin-control.php" class="btn-green">← Retour à l’espace admin</a>
     </section>
 </main>
@@ -103,7 +89,7 @@ new Chart(document.getElementById('creditsChart'), {
         datasets: [{
             label: 'Crédits gagnés',
             data: creditsCount,
-            backgroundColor: 'rgba(75, 192, 192, 0.5)',
+            backgroundColor: 'rgba(8, 243, 44, 0.5)',
             borderWidth: 1
         }]
     }
