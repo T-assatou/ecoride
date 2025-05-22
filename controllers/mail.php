@@ -34,7 +34,7 @@ function envoyerMail($destinataire, $sujet, $contenuHTML, $contenuTexte = '') {
         $mail->SMTPSecure = 'tls';
         $mail->Port = 587;
 
-        $mail->setFrom('tandjasstou@gmail.com', 'EcoRide');
+        $mail->setFrom('contact@ecoride.com', 'EcoRide');
         $mail->addAddress($destinataire);
 
         $mail->isHTML(true);
