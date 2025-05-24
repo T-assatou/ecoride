@@ -7,7 +7,7 @@
 require_once('../models/db.php');
 session_start();
 
-// ✅ Vérifie que l'utilisateur est connecté
+// Vérifie que l'utilisateur est connecté
 if (!isset($_SESSION['user_id'])) {
     header("Location: login.php");
     exit;

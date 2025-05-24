@@ -12,7 +12,7 @@ session_start();
     <meta charset="UTF-8">
     <title>Inscription - EcoRide</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="../Assets/css/style.css">
+    <link rel="stylesheet" href="/Assets/css/style.css">
 </head>
 <body>
 
@@ -39,7 +39,7 @@ session_start();
         <label for="password">Mot de passe :</label>
         <input type="password" name="password" id="password" required>
 
-        <small>🔐 Le mot de passe doit contenir au moins 9 caractères, une majuscule, une minuscule et un chiffre.</small>
+        <small>Le mot de passe doit contenir au moins 9 caractères, une majuscule, une minuscule et un chiffre.</small>
 
         <button type="submit">Créer mon compte</button>
     </form>

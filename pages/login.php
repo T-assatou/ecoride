@@ -12,7 +12,7 @@
     <meta charset="UTF-8">
     <title>Connexion - EcoRide</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="../assets/css/style.css">
+    <link rel="stylesheet" href="/Assets/css/style.css">
 </head>
 <body>
 
@@ -27,7 +27,7 @@
     <section>
     <?php
 if (isset($_GET['message']) && $_GET['message'] === 'compte_suspendu') {
-    echo "<div class='alert'>⛔ Votre compte a été suspendu. Veuillez contacter un administrateur.</div>";
+    echo "<div class='alert'> Votre compte a été suspendu. Veuillez contacter un administrateur.</div>";
 }
 ?>
     <form action="../controllers/authController.php" method="post">

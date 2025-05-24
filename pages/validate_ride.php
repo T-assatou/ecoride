@@ -70,7 +70,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['validation'])) {
 <head>
     <meta charset="UTF-8">
     <title>Validation du trajet</title>
-    <link rel="stylesheet" href="../assets/css/style.css">
+    <link rel="stylesheet" href="/Assets/css/style.css">
 </head>
 <body>
 <?php include('../includes/nav.php'); ?>

@@ -91,7 +91,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['confirm'])) {
 <head>
     <meta charset="UTF-8">
     <title>Confirmer participation - EcoRide</title>
-    <link rel="stylesheet" href="../Assets/css/style.css">
+    <link rel="stylesheet" href="/Assets/css/style.css">
 </head>
 <body>
 

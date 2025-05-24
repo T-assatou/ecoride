@@ -29,7 +29,7 @@ foreach ($creditsData as $row) {
     <meta charset="UTF-8">
     <title>Dashboard Admin - EcoRide</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <link rel="stylesheet" href="../Assets/css/style.css">
+    <link rel="stylesheet" href="/Assets/css/style.css">
 </head>
 <body>
 <?php include('../includes/nav.php'); ?>

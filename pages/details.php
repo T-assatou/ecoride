@@ -43,7 +43,7 @@ $avis = $avis_stmt->fetchAll();
     <meta charset="UTF-8">
     <title>Détail du covoiturage - EcoRide</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="../Assets/css/style.css">
+    <link rel="stylesheet" href="/Assets/css/style.css">
 </head>
 <body>
 

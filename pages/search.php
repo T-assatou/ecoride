@@ -32,10 +32,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['depart'], $_GET['arrive
 
     if (!empty($prix_max)) $sql .= " AND rides.prix <= :prix_max";
     if (!empty($duree_max)) $sql .= " AND rides.duree <= :duree_max";
-    if (!empty($note_min)) $sql .= " HAVING note_moyenne >= :note_min";
-    if ($electrique) $sql .= (strpos($sql, 'HAVING') === false ? " HAVING" : " AND") . " vehicles.energie = 'électrique'";
 
-    $sql .= " GROUP BY rides.id ORDER BY rides.date_depart";
+    $sql .= " GROUP BY rides.id";
+
+    $conditionsHaving = [];
+    if (!empty($note_min)) $conditionsHaving[] = "note_moyenne >= :note_min";
+    if ($electrique) $conditionsHaving[] = "vehicles.energie = 'électrique'";
+    if (!empty($conditionsHaving)) {
+        $sql .= " HAVING " . implode(" AND ", $conditionsHaving);
+    }
+
+    $sql .= " ORDER BY rides.date_depart";
 
     $stmt = $pdo->prepare($sql);
     $stmt->bindValue(':depart', $depart);
@@ -73,7 +80,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['depart'], $_GET['arrive
     <meta charset="UTF-8">
     <title>Rechercher un covoiturage - EcoRide</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="../Assets/css/style.css">
+    <link rel="stylesheet" href="/Assets/css/style.css">
 </head>
 <body>
 
@@ -136,7 +143,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['depart'], $_GET['arrive
                     <?= $ride['note_moyenne'] > 0 ? round($ride['note_moyenne'], 1) . '/5' : '⭐ Pas encore noté' ?>
                 </p>
                 <p><strong>Véhicule :</strong> <?= htmlspecialchars($ride['marque']) ?> <?= htmlspecialchars($ride['modele']) ?> (<?= htmlspecialchars($ride['energie']) ?>)</p>
-                <p><strong>Type de trajet :</strong> <?= $ride['energie'] === 'électrique' ? '✅ Écologique' : '❌ Non écologique' ?></p>
+                <p><strong>Type de trajet :</strong> <?= $ride['energie'] === 'électrique' ? ' Écologique' : ' Non écologique' ?></p>
                 <p><strong>Places disponibles :</strong> <?= htmlspecialchars($ride['places']) ?></p>
                 <a href="details.php?ride_id=<?= $ride['id'] ?>" class="btn-blue">Voir les détails</a>
             </div>

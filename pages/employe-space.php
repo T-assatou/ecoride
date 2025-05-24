@@ -45,7 +45,7 @@ $litiges = $litigeStmt->fetchAll();
 <head>
     <meta charset="UTF-8">
     <title>Espace employé - EcoRide</title>
-    <link rel="stylesheet" href="../Assets/css/style.css">
+    <link rel="stylesheet" href="/Assets/css/style.css">
 </head>
 <body>
 <?php include('../includes/nav.php'); ?>
@@ -58,7 +58,7 @@ $litiges = $litigeStmt->fetchAll();
 
 <!-- ✅ Section : Validation des avis -->
 <section>
-    <h2>Validation des avis ❌/✅</h2>
+    <h2>Validation des avis </h2>
 
     <?php if (empty($avis)) : ?>
         <p>Aucun avis en attente de validation.</p>

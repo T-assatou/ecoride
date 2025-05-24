@@ -17,7 +17,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['role'])) {
 // Ajouter véhicule
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['submit_vehicle'])) {
     $stmt = $pdo->prepare("INSERT INTO vehicles (
-        user_id, plaque, date_immatriculation, modele, couleur, marque, energie, places_vehicule, fumeur, animal, preferences)
+        user_id, plaque, date_immatriculation, modele, couleur, marque, energie, places, fumeur, animal, preferences)
         VALUES (
         :user_id, :plaque, :immat_date, :modele, :couleur, :marque, :energie, :places, :fumeur, :animal, :preferences)");
 
@@ -90,7 +90,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['submit_litige'])) {
         ':chauffeur_id' => $_POST['chauffeur_id'],
         ':commentaire' => $_POST['commentaire']
     ]);
-    $_SESSION['message'] = "⚠️ Litige enregistré.";
+    $_SESSION['message'] = "Litige enregistré.";
     header("Location: user-space.php");
     exit;
 }
@@ -129,7 +129,7 @@ $past_rides = $stmt->fetchAll();
 <head>
     <meta charset="UTF-8">
     <title>Mon espace</title>
-    <link rel="stylesheet" href="../Assets/css/user-space.css">
+    <link rel="stylesheet" href="/Assets/css/user-space.css">
 </head>
 <body>
 <?php include('../includes/nav.php'); ?>
@@ -152,7 +152,7 @@ $past_rides = $stmt->fetchAll();
 <!-- === FORMULAIRE D'AJOUT DE VÉHICULE === -->
 
     <?php if ($_SESSION['role'] !== 'passager'): ?>
-       <h2>🚘 Ajouter un véhicule</h2>
+       <h2> Ajouter un véhicule</h2>
 <form method="post" class="form-user-space">
     <input name="plaque" placeholder="Plaque" required>
 
@@ -178,14 +178,14 @@ $past_rides = $stmt->fetchAll();
     <input type="checkbox" name="animal" value="1"> Accepte animaux<br>
 
     <label>Autres préférences :</label>
-    <textarea name="preferences" placeholder="Ex : pas de musique forte, pas de bagages volumineux..." rows="3"></textarea>
+    <textarea name="preferences" placeholder="  pas de bagages volumineux..." rows="3"></textarea>
 
     <button type="submit" name="submit_vehicle">Ajouter</button>
 </form>
 
 
 <!-- === FORMULAIRE  CREATION TRAJET === -->
-        <h2>🗓️ Créer un trajet</h2>
+        <h2>Créer un trajet</h2>
         <form method="post" class="form-user-space">
             <input name="depart" placeholder="Départ" required>
             <input name="arrivee" placeholder="Arrivée" required>
@@ -215,19 +215,19 @@ $past_rides = $stmt->fetchAll();
         <?php if ($r['statut'] === 'en attente'): ?>
             <form method="post" action="start_ride.php" style="display:inline;">
                 <input type="hidden" name="ride_id" value="<?= $r['id'] ?>">
-                <button type="submit" class="admin-button green">▶️ Démarrer</button>
+                <button type="submit" class="admin-button green"> Démarrer</button>
             </form>
         <?php elseif ($r['statut'] === 'en cours'): ?>
             <form method="post" action="end_ride.php" style="display:inline;">
                 <input type="hidden" name="ride_id" value="<?= $r['id'] ?>">
-                <button type="submit" class="admin-button red">🛑 Arrivée à destination</button>
+                <button type="submit" class="admin-button red"> Arrivée à destination</button>
             </form>
         <?php elseif ($r['statut'] === 'terminé'): ?>
-            <span >✅ Trajet terminé</span>
+            <span >Trajet terminé</span>
         <?php endif; ?>
 
         <!-- Bouton d'annulation -->
-        <a href="cancel_ride.php?ride_id=<?= $r['id'] ?>" class="admin-button red" onclick="return confirm('Êtes-vous sûr de vouloir annuler ce trajet ?');">❌ Annuler</a>
+        <a href="cancel_ride.php?ride_id=<?= $r['id'] ?>" class="admin-button red" onclick="return confirm('Êtes-vous sûr de vouloir annuler ce trajet ?');"> Annuler</a>
     </li>
 <?php endforeach; ?>
 </ul>
@@ -241,17 +241,17 @@ $past_rides = $stmt->fetchAll();
             <p>Conducteur : <?= htmlspecialchars($r['conducteur']) ?></p>
 
            <?php if (strtotime($r['date_arrivee']) < time()): ?>
-    <!-- ✅ Bouton de validation du trajet -->
+    <!--  Bouton de validation du trajet -->
     <a href="validate_ride.php?ride_id=<?= $r['id'] ?>" class="admin-button green">🔍 Valider ce trajet</a>
 
-    <!-- ✍️ Laisser un avis -->
+    <!--  Laisser un avis -->
     <form action="submit-avis.php" method="post" class="form-user-space">
         <input type="hidden" name="chauffeur_id" value="<?= $r['chauffeur_id'] ?>">
         <textarea name="contenu" placeholder="Laisser un avis..." required></textarea>
         <button type="submit">Envoyer avis</button>
     </form>
 
-    <!-- ⚠️ Signaler un litige -->
+    <!--  Signaler un litige -->
     <form action="submit-litige.php" method="post" class="form-user-space">
         <input type="hidden" name="ride_id" value="<?= $r['id'] ?>">
         <input type="hidden" name="chauffeur_id" value="<?= $r['chauffeur_id'] ?>">

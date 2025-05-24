@@ -1,6 +1,6 @@
 <?php
 // ============================
-//US13
+// US13
 // Fichier : pages/create-employee.php
 // Rôle : Permet à l'administrateur de créer un compte employé
 // ============================
@@ -34,7 +34,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             // Hachage du mot de passe
             $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
 
-            // Insertion de l'employé
+            // Insertion de l'employé (les autres valeurs sont directement dans la requête)
             $stmt = $pdo->prepare("INSERT INTO users (pseudo, email, password, credits, role, actif)
                                    VALUES (:pseudo, :email, :password, 0, 'employe', 1)");
             $stmt->execute([
@@ -43,6 +43,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 ':password' => $hashedPassword
             ]);
 
+            // Redirection après création
             header("Location: admin-control.php");
             exit;
         }
@@ -57,7 +58,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <head>
     <meta charset="UTF-8">
     <title>Créer un employé - EcoRide</title>
-    <link rel="stylesheet" href="../Assets/css/style.css">
+    <link rel="stylesheet" href="/Assets/css/style.css">
 </head>
 <body>
 <?php include('../includes/nav.php'); ?>

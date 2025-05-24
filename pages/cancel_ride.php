@@ -5,6 +5,7 @@
 // ============================
 
 require_once('../models/db.php');
+require_once('../controllers/mail.php'); // Pour PHPMailer
 session_start();
 
 // ✅ Vérifie que l’utilisateur est connecté
@@ -22,7 +23,7 @@ if (!$ride_id) {
     exit;
 }
 
-// Vérifie que ce trajet appartient bien à ce chauffeur
+// ✅ Vérifie que ce trajet appartient bien au chauffeur connecté
 $stmt = $pdo->prepare("SELECT * FROM rides WHERE id = :ride_id AND user_id = :user_id");
 $stmt->execute([':ride_id' => $ride_id, ':user_id' => $user_id]);
 $ride = $stmt->fetch();
@@ -32,25 +33,28 @@ if (!$ride) {
     exit;
 }
 
-// Supprimer le trajet
-$pdo->prepare("DELETE FROM rides WHERE id = :ride_id")->execute([':ride_id' => $ride_id]);
-
-// Rembourse les 2 crédits au chauffeur
-$pdo->prepare("UPDATE users SET credits = credits + 2 WHERE id = :id")->execute([':id' => $user_id]);
-
-// Simule un envoi d'email aux passagers
-/*
+// ✅ Récupère les passagers du trajet
 $stmt = $pdo->prepare("SELECT u.email FROM participants p
                        JOIN users u ON p.user_id = u.id
                        WHERE p.ride_id = :ride_id");
 $stmt->execute([':ride_id' => $ride_id]);
 $emails = $stmt->fetchAll();
 
-foreach ($emails as $email) {
-    // mail($email['email'], "Trajet annulé", "Le conducteur a annulé le trajet.");
-}
-*/
+// ✅ Supprime le trajet
+$pdo->prepare("DELETE FROM rides WHERE id = :ride_id")->execute([':ride_id' => $ride_id]);
 
-$_SESSION['message'] = "❌ Trajet annulé. 2 crédits remboursés.";
+// ✅ Rembourse les 2 crédits au chauffeur
+$pdo->prepare("UPDATE users SET credits = credits + 2 WHERE id = :id")->execute([':id' => $user_id]);
+
+// ✅ Envoie un e-mail à chaque passager
+foreach ($emails as $email) {
+    $destinataire = $email['email'];
+    $sujet = "❌ Trajet annulé";
+    $contenu = "<p>Bonjour,</p><p>Le chauffeur a annulé le trajet auquel vous étiez inscrit.</p><p>Nous vous prions de nous excuser pour la gêne occasionnée.</p>";
+    envoyerMail($destinataire, $sujet, $contenu);
+}
+
+// ✅ Message de confirmation
+$_SESSION['message'] = "❌ Trajet annulé. 2 crédits remboursés. Les passagers ont été notifiés.";
 header("Location: user-space.php");
 exit;

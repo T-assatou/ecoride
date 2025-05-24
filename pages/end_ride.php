@@ -5,38 +5,38 @@
 // ============================
 
 require_once('../models/db.php');
-require_once('../controllers/mail.php'); // 📩 PHPMailer via Mailjet
+require_once('../controllers/mail.php'); //  PHPMailer via Mailjet
 session_start();
 
-// ✅ Vérifie l'identité de l'utilisateur connecté
+//  Vérifie l'identité de l'utilisateur connecté
 $ride_id = $_POST['ride_id'] ?? $_GET['ride_id'] ?? null;
 $user_id = $_SESSION['user_id'] ?? null;
 
 if (!$ride_id || !$user_id) {
-    exit("❌ Trajet ou utilisateur non spécifié.");
+    exit(" Trajet ou utilisateur non spécifié.");
 }
 
-// ✅ Vérifie que l'utilisateur est bien le créateur du trajet
+// Vérifie que l'utilisateur est bien le créateur du trajet
 $stmt = $pdo->prepare("SELECT * FROM rides WHERE id = :ride_id AND user_id = :user_id");
 $stmt->execute([':ride_id' => $ride_id, ':user_id' => $user_id]);
 $ride = $stmt->fetch();
 
 if (!$ride) {
-    exit("❌ Accès interdit ou trajet introuvable.");
+    exit("Accès interdit ou trajet introuvable.");
 }
 
-// ✅ Met à jour le statut du trajet à "terminé"
+// Met à jour le statut du trajet à "terminé"
 $pdo->prepare("UPDATE rides SET statut = 'terminé' WHERE id = :id")
     ->execute([':id' => $ride_id]);
 
-// ✅ Récupère les participants inscrits à ce trajet
+// Récupère les participants inscrits à ce trajet
 $stmt = $pdo->prepare("SELECT u.email, u.pseudo FROM participants p 
                        JOIN users u ON p.user_id = u.id 
                        WHERE p.ride_id = :ride_id");
 $stmt->execute([':ride_id' => $ride_id]);
 $participants = $stmt->fetchAll();
 
-// ✅ Envoie un email à chaque participant
+//  Envoie un email à chaque participant
 foreach ($participants as $p) {
     $email = $p['email'];
     $pseudo = htmlspecialchars($p['pseudo']);
@@ -55,7 +55,7 @@ foreach ($participants as $p) {
     envoyerMail($email, $sujet, $messageHTML, $messageTexte);
 }
 
-// ✅ Message de confirmation
+// Message de confirmation
 $_SESSION['message'] = "📬 Trajet terminé. Les passagers ont été notifiés par email.";
 header("Location: user-space.php");
 exit;

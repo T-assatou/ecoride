@@ -4,7 +4,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   links.forEach(link => {
     link.addEventListener("click", (e) => {
-      const message = link.getAttribute("data-confirm") || "Es-tu sûr(e) ?";
+      const message = link.dataset.confirm || "Es-tu sûr(e) ?";
       if (!confirm(message)) {
         e.preventDefault();
       }

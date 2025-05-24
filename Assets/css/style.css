@@ -183,7 +183,7 @@ a {
 .admin-button {
   display: inline-block;
   padding: 8px 12px;
-  color: wheat;
+  color: rgb(187, 52, 6);
   text-decoration: none;
   border-radius: 5px;
 }
@@ -252,11 +252,12 @@ a {
 }
 
 /* TEXTE COLORÉ */
-.confirm-action.red {
-  color: red;
+a.confirm-action.red {
+    color: #d63031; /* rouge vif */
 }
-.confirm-action.green {
-  color: green;
+
+a.confirm-action.green {
+    color: #00b894; /* vert émeraude */
 }
 
 .link-white,

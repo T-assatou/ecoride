@@ -1,22 +1,26 @@
-# fly.toml app configuration file generated for ecoride-green-thunder-7010 on 2025-05-22T23:09:38Z
-#
-# See https://fly.io/docs/reference/configuration/ for information about how to use this file.
-#
-
-app = 'ecoride-green-thunder-7010'
-primary_region = 'lhr'
+# fly.toml app configuration file generated for ecoride-bold-sky-2587
+app = "ecoride-bold-sky-2587"
+primary_region = "lhr"
 
 [build]
 
+[env]
+  PORT = "8080"
+  DB_HOST = "***REMOVED***"
+  DB_PORT = "32252"
+  DB_DATABASE = "***REMOVED***"
+  DB_USERNAME = "***REMOVED***"
+  DB_PASSWORD = "***REMOVED***"
+
 [http_service]
-  internal_port = 80
+  internal_port = 8080
   force_https = true
-  auto_stop_machines = 'stop'
+  auto_stop_machines = "stop"
   auto_start_machines = true
   min_machines_running = 0
-  processes = ['app']
+  processes = ["app"]
 
 [[vm]]
-  memory = '1gb'
-  cpu_kind = 'shared'
+  memory = "1gb"
+  cpu_kind = "shared"
   cpus = 1
